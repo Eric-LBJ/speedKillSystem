@@ -68,10 +68,10 @@ public class SpeedKillUserServiceImpl implements SpeedKillUserService {
 
     @Override
     public SpeedKillUserDTO getSpeedKillUserByToken(String token) {
-        if (StringUtils.isEmpty(token)){
+        if (StringUtils.isEmpty(token)) {
             return null;
         }
-        return infoToDto(redisDao.get(SpeedKillUserKey.token,token,SpeedKillUser.class));
+        return infoToDto(redisDao.get(SpeedKillUserKey.token, token, SpeedKillUser.class));
     }
 
     private void addCookie(HttpServletResponse response, String token, SpeedKillUser speedKillUser) {
@@ -82,10 +82,10 @@ public class SpeedKillUserServiceImpl implements SpeedKillUserService {
         response.addCookie(cookie);
     }
 
-    private SpeedKillUserDTO infoToDto(SpeedKillUser speedKillUser){
+    private SpeedKillUserDTO infoToDto(SpeedKillUser speedKillUser) {
         SpeedKillUserDTO speedKillUserDTO = new SpeedKillUserDTO();
-        if (!ObjectUtils.isEmpty(speedKillUser)){
-            BeanUtils.copyProperties(speedKillUser,speedKillUserDTO);
+        if (!ObjectUtils.isEmpty(speedKillUser)) {
+            BeanUtils.copyProperties(speedKillUser, speedKillUserDTO);
         }
         return speedKillUserDTO;
     }
