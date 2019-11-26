@@ -32,14 +32,14 @@ public class GoodsController {
 
     @RequestMapping("/to_list")
     public String toList(Model model,
-                                 @CookieValue(value = Constans.COOKI_NAME_TOKEN,required = false) String cookieToken,
-                                 @RequestParam(value = Constans.COOKI_NAME_TOKEN,required = false) String paramToken) {
-        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)){
+                         @CookieValue(value = Constans.COOKI_NAME_TOKEN, required = false) String cookieToken,
+                         @RequestParam(value = Constans.COOKI_NAME_TOKEN, required = false) String paramToken) {
+        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
             return "login";
         }
         String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        SpeedKillUser speedKillUser = redisService.get(SpeedKillUserKey.token,token,SpeedKillUser.class);
-        model.addAttribute("user",speedKillUser);
+        SpeedKillUser speedKillUser = redisService.get(SpeedKillUserKey.token, token, SpeedKillUser.class);
+        model.addAttribute("user", speedKillUser);
         return "goods_list";
     }
 
