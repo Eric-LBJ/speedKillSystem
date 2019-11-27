@@ -27,9 +27,6 @@ public class GoodsController {
     @Resource
     private RedisService redisService;
 
-    @Resource
-    private SpeedKillUserService speedKillUserService;
-
     @RequestMapping("/to_list")
     public String toList(Model model,
                          @CookieValue(value = Constans.COOKI_NAME_TOKEN, required = false) String cookieToken,
