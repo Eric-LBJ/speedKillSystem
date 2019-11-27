@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="E:\Company\maven\MavenRepository\mysql\mysql-connector-java\5.1.18\mysql-connector-java-5.1.18.jar" />
+
+    <context id="speedKill" targetRuntime="MyBatis3Simple">
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.12.129:3306/speedKill"
+                        userId="root"
+                        password="Bgscj0.0">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.aikeeper.speed.kill.system.domain.info"
+							targetProject="F:\myGitLocalRepository\speed_kill_system\src\main\java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper"
+						 targetProject="F:\myGitLocalRepository\speed_kill_system\src\main\resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.aikeeper.speed.kill.system.dal"
+                             targetProject="F:\myGitLocalRepository\speed_kill_system\src\main\java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table schema="speedKill" tableName="goods" domainObjectName="GoodsInfo" >
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+        <table schema="speedKill" tableName="order_info" domainObjectName="OrderInfo" >
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+        <table schema="speedKill" tableName="speed_kill_goods" domainObjectName="SpeedKillGoodsInfo" >
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+        <table schema="speedKill" tableName="speed_kill_order" domainObjectName="SpeedKillOrderInfo" >
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
