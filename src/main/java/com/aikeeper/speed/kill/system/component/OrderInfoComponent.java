@@ -1,7 +1,6 @@
 package com.aikeeper.speed.kill.system.component;
 
-import com.aikeeper.speed.kill.system.domain.info.OrderInfo;
-import org.apache.ibatis.annotations.Mapper;
+import com.aikeeper.speed.kill.system.domain.dto.OrderInfoDTO;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public interface OrderInfoComponent {
      * @param record
      * @return
      */
-    Boolean insert(OrderInfo record);
+    Boolean insert(OrderInfoDTO record);
 
     /**
      * 根据id获取订单信息
@@ -32,14 +31,14 @@ public interface OrderInfoComponent {
      * @param id
      * @return
      */
-    OrderInfo selectByPrimaryKey(Long id);
+    OrderInfoDTO selectByPrimaryKey(Long id);
 
     /**
      * 获取订单信息列表
      *
      * @return
      */
-    List<OrderInfo> selectAll();
+    List<OrderInfoDTO> selectAll();
 
     /**
      * 更新订单信息
@@ -47,5 +46,5 @@ public interface OrderInfoComponent {
      * @param record
      * @return
      */
-    Boolean updateByPrimaryKey(OrderInfo record);
+    Boolean updateByPrimaryKey(OrderInfoDTO record);
 }

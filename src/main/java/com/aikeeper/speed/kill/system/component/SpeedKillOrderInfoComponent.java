@@ -1,7 +1,6 @@
 package com.aikeeper.speed.kill.system.component;
 
-import com.aikeeper.speed.kill.system.domain.info.SpeedKillOrderInfo;
-import org.apache.ibatis.annotations.Mapper;
+import com.aikeeper.speed.kill.system.domain.dto.SpeedKillOrderInfoDTO;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public interface SpeedKillOrderInfoComponent {
      * @param record
      * @return
      */
-    Boolean insert(SpeedKillOrderInfo record);
+    Boolean insert(SpeedKillOrderInfoDTO record);
 
     /**
      * 根据id获取秒杀订单信息
@@ -32,14 +31,14 @@ public interface SpeedKillOrderInfoComponent {
      * @param id
      * @return
      */
-    SpeedKillOrderInfo selectByPrimaryKey(Long id);
+    SpeedKillOrderInfoDTO selectByPrimaryKey(Long id);
 
     /**
      * 获取秒杀订单信息列表
      *
      * @return
      */
-    List<SpeedKillOrderInfo> selectAll();
+    List<SpeedKillOrderInfoDTO> selectAll();
 
     /**
      * 更新秒杀订单信息
@@ -47,5 +46,5 @@ public interface SpeedKillOrderInfoComponent {
      * @param record
      * @return
      */
-    Boolean updateByPrimaryKey(SpeedKillOrderInfo record);
+    Boolean updateByPrimaryKey(SpeedKillOrderInfoDTO record);
 }

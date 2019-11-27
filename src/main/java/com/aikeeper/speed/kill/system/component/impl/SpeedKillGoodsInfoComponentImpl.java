@@ -2,9 +2,11 @@ package com.aikeeper.speed.kill.system.component.impl;
 
 import com.aikeeper.speed.kill.system.component.SpeedKillGoodsInfoComponent;
 import com.aikeeper.speed.kill.system.dal.SpeedKillGoodsInfoMapper;
+import com.aikeeper.speed.kill.system.domain.dto.SpeedKillGoodsInfoDTO;
 import com.aikeeper.speed.kill.system.domain.info.SpeedKillGoodsInfo;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,22 +26,38 @@ public class SpeedKillGoodsInfoComponentImpl implements SpeedKillGoodsInfoCompon
     }
 
     @Override
-    public Boolean insert(SpeedKillGoodsInfo record) {
+    public Boolean insert(SpeedKillGoodsInfoDTO record) {
         return null;
     }
 
     @Override
-    public SpeedKillGoodsInfo selectByPrimaryKey(Long id) {
+    public SpeedKillGoodsInfoDTO selectByPrimaryKey(Long id) {
         return null;
     }
 
     @Override
-    public List<SpeedKillGoodsInfo> selectAll() {
+    public List<SpeedKillGoodsInfoDTO> selectAll() {
         return null;
     }
 
     @Override
-    public Boolean updateByPrimaryKey(SpeedKillGoodsInfo record) {
+    public Boolean updateByPrimaryKey(SpeedKillGoodsInfoDTO record) {
         return null;
+    }
+
+    public SpeedKillGoodsInfoDTO infoToDto(SpeedKillGoodsInfo info){
+        SpeedKillGoodsInfoDTO dto = new SpeedKillGoodsInfoDTO();
+        if (!ObjectUtils.isEmpty(info)){
+            BeanUtils.copyProperties(info,dto);
+        }
+        return dto;
+    }
+
+    public SpeedKillGoodsInfo dtoToInfo(SpeedKillGoodsInfoDTO dto){
+        SpeedKillGoodsInfo info = new SpeedKillGoodsInfo();
+        if (!ObjectUtils.isEmpty(dto)){
+            BeanUtils.copyProperties(dto,info);
+        }
+        return info;
     }
 }

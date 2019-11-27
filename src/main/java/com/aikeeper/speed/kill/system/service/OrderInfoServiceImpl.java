@@ -2,8 +2,11 @@ package com.aikeeper.speed.kill.system.service;
 
 import com.aikeeper.speed.kill.system.api.OrderInfoService;
 import com.aikeeper.speed.kill.system.component.OrderInfoComponent;
-import com.aikeeper.speed.kill.system.domain.info.OrderInfo;
+import com.aikeeper.speed.kill.system.domain.dto.OrderInfoDTO;
+import com.aikeeper.speed.kill.system.domain.vo.OrderInfoVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,22 +26,38 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public Boolean insert(OrderInfo record) {
+    public Boolean insert(OrderInfoVO record) {
         return null;
     }
 
     @Override
-    public OrderInfo selectByPrimaryKey(Long id) {
+    public OrderInfoVO selectByPrimaryKey(Long id) {
         return null;
     }
 
     @Override
-    public List<OrderInfo> selectAll() {
+    public List<OrderInfoVO> selectAll() {
         return null;
     }
 
     @Override
-    public Boolean updateByPrimaryKey(OrderInfo record) {
+    public Boolean updateByPrimaryKey(OrderInfoVO record) {
         return null;
+    }
+
+    public OrderInfoVO dtoToVo(OrderInfoDTO info) {
+        OrderInfoVO vo = new OrderInfoVO();
+        if (!ObjectUtils.isEmpty(info)) {
+            BeanUtils.copyProperties(info, vo);
+        }
+        return vo;
+    }
+
+    public OrderInfoDTO voToDto(OrderInfoVO vo) {
+        OrderInfoDTO dto = new OrderInfoDTO();
+        if (!ObjectUtils.isEmpty(vo)) {
+            BeanUtils.copyProperties(vo, dto);
+        }
+        return dto;
     }
 }

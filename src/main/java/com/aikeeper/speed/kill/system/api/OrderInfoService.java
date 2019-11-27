@@ -1,6 +1,6 @@
 package com.aikeeper.speed.kill.system.api;
 
-import com.aikeeper.speed.kill.system.domain.info.OrderInfo;
+import com.aikeeper.speed.kill.system.domain.vo.OrderInfoVO;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface OrderInfoService {
      * @param record
      * @return
      */
-    Boolean insert(OrderInfo record);
+    Boolean insert(OrderInfoVO record);
 
     /**
      * 根据id获取订单信息
@@ -31,14 +31,14 @@ public interface OrderInfoService {
      * @param id
      * @return
      */
-    OrderInfo selectByPrimaryKey(Long id);
+    OrderInfoVO selectByPrimaryKey(Long id);
 
     /**
      * 获取订单信息列表
      *
      * @return
      */
-    List<OrderInfo> selectAll();
+    List<OrderInfoVO> selectAll();
 
     /**
      * 更新订单信息
@@ -46,5 +46,5 @@ public interface OrderInfoService {
      * @param record
      * @return
      */
-    Boolean updateByPrimaryKey(OrderInfo record);
+    Boolean updateByPrimaryKey(OrderInfoVO record);
 }

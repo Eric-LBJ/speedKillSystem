@@ -1,7 +1,6 @@
 package com.aikeeper.speed.kill.system.component;
 
-import com.aikeeper.speed.kill.system.domain.info.GoodsInfo;
-import org.apache.ibatis.annotations.Mapper;
+import com.aikeeper.speed.kill.system.domain.dto.GoodsInfoDTO;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public interface GoodsInfoComponent {
      * @param record
      * @return
      */
-    Boolean insert(GoodsInfo record);
+    Boolean insert(GoodsInfoDTO record);
 
     /**
      * 根据id获取商品信息
@@ -32,14 +31,14 @@ public interface GoodsInfoComponent {
      * @param id
      * @return
      */
-    GoodsInfo selectByPrimaryKey(Long id);
+    GoodsInfoDTO selectByPrimaryKey(Long id);
 
     /**
      * 获取商品列表信息
      *
      * @return
      */
-    List<GoodsInfo> selectAll();
+    List<GoodsInfoDTO> selectAll();
 
     /**
      * 更新商品信息
@@ -47,5 +46,5 @@ public interface GoodsInfoComponent {
      * @param record
      * @return
      */
-    Boolean updateByPrimaryKey(GoodsInfo record);
+    Boolean updateByPrimaryKey(GoodsInfoDTO record);
 }
