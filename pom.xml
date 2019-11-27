@@ -61,7 +61,7 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
-        <!--fastjson-->
+        <!--fastJson-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
