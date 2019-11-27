@@ -7,7 +7,7 @@ import com.aikeeper.speed.kill.system.dal.RedisDao;
 import com.aikeeper.speed.kill.system.dal.SpeedKillUserMapper;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
 import com.aikeeper.speed.kill.system.domain.info.SpeedKillUser;
-import com.aikeeper.speed.kill.system.domain.vo.LoginVo;
+import com.aikeeper.speed.kill.system.domain.vo.LoginVO;
 import com.aikeeper.speed.kill.system.exception.GlobalException;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
 import com.aikeeper.speed.kill.system.utils.KeyFactory;
@@ -42,7 +42,7 @@ public class SpeedKillUserComponentImpl implements SpeedKillUserComponent {
     }
 
     @Override
-    public Boolean userLogin(HttpServletResponse response, LoginVo loginVo) {
+    public Boolean userLogin(HttpServletResponse response, LoginVO loginVo) {
 
         SpeedKillUser speedKillUser = speedKillUserMapper.getSpeedKillUserById(Long.parseLong(loginVo.getMobile()));
         /**

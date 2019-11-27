@@ -1,7 +1,7 @@
 package com.aikeeper.speed.kill.system.controller;
 
 import com.aikeeper.speed.kill.system.api.SpeedKillUserService;
-import com.aikeeper.speed.kill.system.domain.vo.LoginVo;
+import com.aikeeper.speed.kill.system.domain.vo.LoginVO;
 import com.aikeeper.speed.kill.system.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class LoginController {
 
     @RequestMapping("/doLogin")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
+    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVO loginVo) {
         return Result.success(speedKillUserService.userLogin(response, loginVo));
     }
 

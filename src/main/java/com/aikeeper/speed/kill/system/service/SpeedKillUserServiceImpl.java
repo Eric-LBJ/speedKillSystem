@@ -3,7 +3,7 @@ package com.aikeeper.speed.kill.system.service;
 import com.aikeeper.speed.kill.system.component.SpeedKillUserComponent;
 import com.aikeeper.speed.kill.system.api.SpeedKillUserService;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
-import com.aikeeper.speed.kill.system.domain.vo.LoginVo;
+import com.aikeeper.speed.kill.system.domain.vo.LoginVO;
 import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class SpeedKillUserServiceImpl implements SpeedKillUserService {
     }
 
     @Override
-    public Boolean userLogin(HttpServletResponse response, LoginVo loginVo) {
+    public Boolean userLogin(HttpServletResponse response, LoginVO loginVo) {
        return speedKillUserComponent.userLogin(response, loginVo);
     }
 

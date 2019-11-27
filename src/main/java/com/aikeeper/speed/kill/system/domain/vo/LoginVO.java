@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  **/
 @Data
 @ToString
-public class LoginVo {
+public class LoginVO {
 
     /**
      * 手机号码

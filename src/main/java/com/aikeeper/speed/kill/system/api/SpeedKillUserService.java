@@ -1,7 +1,6 @@
 package com.aikeeper.speed.kill.system.api;
 
-import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
-import com.aikeeper.speed.kill.system.domain.vo.LoginVo;
+import com.aikeeper.speed.kill.system.domain.vo.LoginVO;
 import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +28,7 @@ public interface SpeedKillUserService {
      * @param loginVo
      * @return
      */
-    Boolean userLogin(HttpServletResponse response, LoginVo loginVo);
+    Boolean userLogin(HttpServletResponse response, LoginVO loginVo);
 
     /**
      * 根据token获取用户信息
