@@ -1,18 +1,20 @@
 package com.aikeeper.speed.kill.system.controller;
 
-import com.aikeeper.speed.kill.system.api.RedisService;
 import com.aikeeper.speed.kill.system.api.SpeedKillUserService;
 import com.aikeeper.speed.kill.system.comm.Constans;
-import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.SpeedKillUserKey;
-import com.aikeeper.speed.kill.system.domain.info.SpeedKillUser;
+import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Description: TODO
@@ -24,20 +26,18 @@ import javax.annotation.Resource;
 @RequestMapping("/goods")
 public class GoodsController {
 
-    @Resource
-    private RedisService redisService;
-
     @RequestMapping("/to_list")
-    public String toList(Model model,
-                         @CookieValue(value = Constans.COOKI_NAME_TOKEN, required = false) String cookieToken,
-                         @RequestParam(value = Constans.COOKI_NAME_TOKEN, required = false) String paramToken) {
-        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
-            return "login";
-        }
-        String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        SpeedKillUser speedKillUser = redisService.get(SpeedKillUserKey.token, token, SpeedKillUser.class);
-        model.addAttribute("user", speedKillUser);
+    public String toList(Model model, SpeedKillUserDTO speedKillUserDTO) {
+        model.addAttribute("user", dtoToVo(speedKillUserDTO));
         return "goods_list";
+    }
+
+    private SpeedKillUserVO dtoToVo(SpeedKillUserDTO speedKillUserDTO) {
+        SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
+        if (!ObjectUtils.isEmpty(speedKillUserDTO)) {
+            BeanUtils.copyProperties(speedKillUserDTO, speedKillUserVO);
+        }
+        return speedKillUserVO;
     }
 
 }

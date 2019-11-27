@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
             BindException exception = (BindException) e;
             List<ObjectError> allErrors = exception.getAllErrors();
             AtomicReference<String> errorMessage = new AtomicReference<>("");
-            allErrors.forEach(item -> errorMessage.updateAndGet(v -> v + item.getDefaultMessage()));
+            allErrors.forEach(item -> errorMessage.updateAndGet(v -> v + item.getDefaultMessage() + "; "));
             return Result.error(CodeMessage.BIND_ERROR.fillArgs(errorMessage.get()));
         } else {
             return Result.error(CodeMessage.SERVER_ERROR);

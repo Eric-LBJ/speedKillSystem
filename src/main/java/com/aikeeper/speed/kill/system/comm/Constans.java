@@ -43,5 +43,5 @@ public class Constans {
     /**
      * cookie名称
      */
-    public static final String COOKI_NAME_TOKEN = "token";
+    public static final String COOKIE_NAME_TOKEN = "token";
 }

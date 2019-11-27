@@ -1,8 +1,7 @@
-package com.aikeeper.speed.kill.system.api;
+package com.aikeeper.speed.kill.system.component;
 
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
 import com.aikeeper.speed.kill.system.domain.vo.LoginVo;
-import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Date 2019/11/25 15:07
  * @Version V1.0
  **/
-public interface SpeedKillUserService {
+public interface SpeedKillUserComponent {
 
     /**
      * 根据手机获取用户信息
@@ -20,7 +19,7 @@ public interface SpeedKillUserService {
      * @param id
      * @return
      */
-    SpeedKillUserVO getSpeedKillUserById(Long id);
+    SpeedKillUserDTO getSpeedKillUserById(Long id);
 
     /**
      * 用户登录
@@ -38,5 +37,5 @@ public interface SpeedKillUserService {
      * @param token
      * @return
      */
-    SpeedKillUserVO getSpeedKillUserByToken(HttpServletResponse httpServletResponse, String token);
+    SpeedKillUserDTO getSpeedKillUserByToken(HttpServletResponse httpServletResponse, String token);
 }
