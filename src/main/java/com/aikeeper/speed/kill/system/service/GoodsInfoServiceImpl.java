@@ -10,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author
@@ -22,27 +23,27 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Override
     public Boolean deleteByPrimaryKey(Long id) {
-        return null;
+        return goodsInfoComponent.deleteByPrimaryKey(id);
     }
 
     @Override
     public Boolean insert(GoodsInfoVO record) {
-        return null;
+        return goodsInfoComponent.insert(voToDto(record));
     }
 
     @Override
     public GoodsInfoVO selectByPrimaryKey(Long id) {
-        return null;
+        return dtoToVo(goodsInfoComponent.selectByPrimaryKey(id));
     }
 
     @Override
     public List<GoodsInfoVO> selectAll() {
-        return null;
+        return goodsInfoComponent.selectAll().stream().map(item -> dtoToVo(item)).collect(Collectors.toList());
     }
 
     @Override
     public Boolean updateByPrimaryKey(GoodsInfoVO record) {
-        return null;
+        return goodsInfoComponent.updateByPrimaryKey(voToDto(record));
     }
 
     public GoodsInfoVO dtoToVo(GoodsInfoDTO info) {

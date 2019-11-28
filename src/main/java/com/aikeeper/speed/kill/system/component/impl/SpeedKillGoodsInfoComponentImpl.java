@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author
@@ -22,27 +25,29 @@ public class SpeedKillGoodsInfoComponentImpl implements SpeedKillGoodsInfoCompon
 
     @Override
     public Boolean deleteByPrimaryKey(Long id) {
-        return null;
+        return speedKillGoodsInfoMapper.deleteByPrimaryKey(id) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
     public Boolean insert(SpeedKillGoodsInfoDTO record) {
-        return null;
+        return speedKillGoodsInfoMapper.insert(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
     public SpeedKillGoodsInfoDTO selectByPrimaryKey(Long id) {
-        return null;
+        return infoToDto(Optional.ofNullable(speedKillGoodsInfoMapper.selectByPrimaryKey(id)).orElse(new SpeedKillGoodsInfo()));
     }
 
     @Override
     public List<SpeedKillGoodsInfoDTO> selectAll() {
-        return null;
+        return Optional
+                .ofNullable(speedKillGoodsInfoMapper.selectAll())
+                .orElse(new ArrayList<>()).stream().map(item -> infoToDto(item)).collect(Collectors.toList());
     }
 
     @Override
     public Boolean updateByPrimaryKey(SpeedKillGoodsInfoDTO record) {
-        return null;
+        return speedKillGoodsInfoMapper.updateByPrimaryKey(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public SpeedKillGoodsInfoDTO infoToDto(SpeedKillGoodsInfo info){

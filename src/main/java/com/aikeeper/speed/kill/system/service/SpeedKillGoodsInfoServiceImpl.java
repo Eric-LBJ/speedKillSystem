@@ -10,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author
@@ -22,27 +23,27 @@ public class SpeedKillGoodsInfoServiceImpl implements SpeedKillGoodsInfoService 
 
     @Override
     public Boolean deleteByPrimaryKey(Long id) {
-        return null;
+        return speedKillGoodsInfoComponent.deleteByPrimaryKey(id);
     }
 
     @Override
     public Boolean insert(SpeedKillGoodsInfoVO record) {
-        return null;
+        return speedKillGoodsInfoComponent.insert(voToDto(record));
     }
 
     @Override
     public SpeedKillGoodsInfoVO selectByPrimaryKey(Long id) {
-        return null;
+        return dtoToVo(speedKillGoodsInfoComponent.selectByPrimaryKey(id));
     }
 
     @Override
     public List<SpeedKillGoodsInfoVO> selectAll() {
-        return null;
+        return speedKillGoodsInfoComponent.selectAll().stream().map(item -> dtoToVo(item)).collect(Collectors.toList());
     }
 
     @Override
     public Boolean updateByPrimaryKey(SpeedKillGoodsInfoVO record) {
-        return null;
+        return speedKillGoodsInfoComponent.updateByPrimaryKey(voToDto(record));
     }
 
     public SpeedKillGoodsInfoVO dtoToVo(SpeedKillGoodsInfoDTO info) {

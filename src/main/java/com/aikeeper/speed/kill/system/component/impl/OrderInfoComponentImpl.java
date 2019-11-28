@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author
@@ -22,27 +25,29 @@ public class OrderInfoComponentImpl implements OrderInfoComponent {
 
     @Override
     public Boolean deleteByPrimaryKey(Long id) {
-        return null;
+        return orderInfoMapper.deleteByPrimaryKey(id) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
     public Boolean insert(OrderInfoDTO record) {
-        return null;
+        return orderInfoMapper.insert(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
     public OrderInfoDTO selectByPrimaryKey(Long id) {
-        return null;
+        return infoToDto(Optional.ofNullable(orderInfoMapper.selectByPrimaryKey(id)).orElse(new OrderInfo()));
     }
 
     @Override
     public List<OrderInfoDTO> selectAll() {
-        return null;
+        return Optional
+                .ofNullable(orderInfoMapper.selectAll())
+                .orElse(new ArrayList<>()).stream().map(item -> infoToDto(item)).collect(Collectors.toList());
     }
 
     @Override
     public Boolean updateByPrimaryKey(OrderInfoDTO record) {
-        return null;
+        return orderInfoMapper.updateByPrimaryKey(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public OrderInfoDTO infoToDto(OrderInfo info){

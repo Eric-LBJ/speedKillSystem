@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author
@@ -22,41 +25,43 @@ public class GoodsInfoComponentImpl implements GoodsInfoComponent {
 
     @Override
     public Boolean deleteByPrimaryKey(Long id) {
-        return null;
+        return goodsInfoMapper.deleteByPrimaryKey(id) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
     public Boolean insert(GoodsInfoDTO record) {
-        return null;
+        return goodsInfoMapper.insert(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
     public GoodsInfoDTO selectByPrimaryKey(Long id) {
-        return null;
+        return infoToDto(Optional.ofNullable(goodsInfoMapper.selectByPrimaryKey(id)).orElse(new GoodsInfo()));
     }
 
     @Override
     public List<GoodsInfoDTO> selectAll() {
-        return null;
+        return Optional
+                .ofNullable(goodsInfoMapper.selectAll())
+                .orElse(new ArrayList<>()).stream().map(item -> infoToDto(item)).collect(Collectors.toList());
     }
 
     @Override
     public Boolean updateByPrimaryKey(GoodsInfoDTO record) {
-        return null;
+        return goodsInfoMapper.updateByPrimaryKey(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public GoodsInfoDTO infoToDto(GoodsInfo info){
+    public GoodsInfoDTO infoToDto(GoodsInfo info) {
         GoodsInfoDTO dto = new GoodsInfoDTO();
-        if (!ObjectUtils.isEmpty(info)){
-            BeanUtils.copyProperties(info,dto);
+        if (!ObjectUtils.isEmpty(info)) {
+            BeanUtils.copyProperties(info, dto);
         }
         return dto;
     }
 
-    public GoodsInfo dtoToInfo(GoodsInfoDTO dto){
+    public GoodsInfo dtoToInfo(GoodsInfoDTO dto) {
         GoodsInfo info = new GoodsInfo();
-        if (!ObjectUtils.isEmpty(dto)){
-            BeanUtils.copyProperties(dto,info);
+        if (!ObjectUtils.isEmpty(dto)) {
+            BeanUtils.copyProperties(dto, info);
         }
         return info;
     }
