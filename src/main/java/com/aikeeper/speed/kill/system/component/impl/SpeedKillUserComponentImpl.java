@@ -10,7 +10,7 @@ import com.aikeeper.speed.kill.system.domain.info.SpeedKillUser;
 import com.aikeeper.speed.kill.system.domain.vo.LoginVO;
 import com.aikeeper.speed.kill.system.exception.GlobalException;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
-import com.aikeeper.speed.kill.system.utils.KeyFactory;
+import com.aikeeper.speed.kill.system.utils.IdGeneratorUtils;
 import com.aikeeper.speed.kill.system.utils.Md5Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class SpeedKillUserComponentImpl implements SpeedKillUserComponent {
         }
 
         /**设置cookie*/
-        String token = KeyFactory.genLoginToken(20);
+        String token = IdGeneratorUtils.simpleUUID();
         addCookie(response, token, speedKillUser);
 
         return Boolean.TRUE;

@@ -47,4 +47,11 @@ public interface GoodsInfoService {
      * @return
      */
     Boolean updateByPrimaryKey(GoodsInfoVO record);
+
+    /**
+     * 获取秒杀商品列表信息
+     *
+     * @return
+     */
+    List<GoodsInfoVO> listSpeedKillGoods();
 }

@@ -50,6 +50,13 @@ public class GoodsInfoComponentImpl implements GoodsInfoComponent {
         return goodsInfoMapper.updateByPrimaryKey(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    @Override
+    public List<GoodsInfoDTO> listSpeedKillGoods() {
+        return Optional
+                .ofNullable(goodsInfoMapper.listSpeedKillGoods())
+                .orElse(new ArrayList<>()).stream().map(item -> infoToDto(item)).collect(Collectors.toList());
+    }
+
     public GoodsInfoDTO infoToDto(GoodsInfo info) {
         GoodsInfoDTO dto = new GoodsInfoDTO();
         if (!ObjectUtils.isEmpty(info)) {

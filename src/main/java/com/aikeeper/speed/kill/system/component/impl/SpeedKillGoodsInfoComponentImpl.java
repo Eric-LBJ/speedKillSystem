@@ -50,6 +50,16 @@ public class SpeedKillGoodsInfoComponentImpl implements SpeedKillGoodsInfoCompon
         return speedKillGoodsInfoMapper.updateByPrimaryKey(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    @Override
+    public Boolean updateByGoodsId(SpeedKillGoodsInfoDTO record) {
+        return speedKillGoodsInfoMapper.updateByGoodsId(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+    @Override
+    public SpeedKillGoodsInfoDTO getSpeedKillGoodsInfoByGoodsId(Long goodsId) {
+        return infoToDto(Optional.ofNullable(speedKillGoodsInfoMapper.getSpeedKillGoodsInfoByGoodsId(goodsId)).orElse(new SpeedKillGoodsInfo()));
+    }
+
     public SpeedKillGoodsInfoDTO infoToDto(SpeedKillGoodsInfo info){
         SpeedKillGoodsInfoDTO dto = new SpeedKillGoodsInfoDTO();
         if (!ObjectUtils.isEmpty(info)){

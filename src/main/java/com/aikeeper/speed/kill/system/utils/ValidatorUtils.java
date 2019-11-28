@@ -14,13 +14,13 @@ import java.util.regex.Pattern;
 public class ValidatorUtils {
 
     /**正则表达式*/
-    private static final Pattern mobile_pattern = Pattern.compile("1\\d{10}");
+    private static final Pattern MOBILE_PATTERN = Pattern.compile("1\\d{10}");
 
     public static Boolean isPhone(String phone){
         if(StringUtils.isEmpty(phone)) {
             return Boolean.FALSE;
         }
-        Matcher m = mobile_pattern.matcher(phone);
+        Matcher m = MOBILE_PATTERN.matcher(phone);
         return m.matches();
     }
 

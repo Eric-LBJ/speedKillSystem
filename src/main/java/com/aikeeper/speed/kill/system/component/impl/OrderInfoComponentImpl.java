@@ -29,8 +29,13 @@ public class OrderInfoComponentImpl implements OrderInfoComponent {
     }
 
     @Override
-    public Boolean insert(OrderInfoDTO record) {
-        return orderInfoMapper.insert(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    public OrderInfoDTO insert(OrderInfoDTO record) {
+        OrderInfo orderInfo = dtoToInfo(record);
+        Boolean isInsert = orderInfoMapper.insert(orderInfo) > 0 ? Boolean.TRUE : Boolean.FALSE;
+        if (isInsert){
+            return infoToDto(orderInfo);
+        }
+        return null;
     }
 
     @Override

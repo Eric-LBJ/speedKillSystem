@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author
@@ -49,5 +50,25 @@ public class GoodsInfoVO implements Serializable {
      * 商品详情
      */
     private String goodsDetail;
+
+    /**
+     * 秒杀单价
+     */
+    private BigDecimal speedKillPrice;
+
+    /**
+     * 库存数量
+     */
+    private Integer stockCount;
+
+    /**
+     * 秒杀开始时间
+     */
+    private Date startDate;
+
+    /**
+     * 秒杀结束时间
+     */
+    private Date endDate;
 
 }

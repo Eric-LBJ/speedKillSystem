@@ -47,4 +47,20 @@ public interface SpeedKillGoodsInfoService {
      * @return
      */
     Boolean updateByPrimaryKey(SpeedKillGoodsInfoVO record);
+
+    /**
+     * 根据商品编号更新秒杀商品信息
+     *
+     * @param record
+     * @return
+     */
+    Boolean updateByGoodsId(SpeedKillGoodsInfoVO record);
+
+    /**
+     * 根据商品编号获取秒杀商品信息
+     *
+     * @param goodsId
+     * @return
+     */
+    SpeedKillGoodsInfoVO getSpeedKillGoodsInfoByGoodsId(Long goodsId);
 }

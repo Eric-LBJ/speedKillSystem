@@ -46,6 +46,11 @@ public class SpeedKillOrderInfoServiceImpl implements SpeedKillOrderInfoService 
         return speedKillOrderInfoComponent.updateByPrimaryKey(voToDto(record));
     }
 
+    @Override
+    public SpeedKillOrderInfoVO getSpeedKillOrderInfoByUserAndGoodsId(Long userId, Long goodsId) {
+        return dtoToVo(speedKillOrderInfoComponent.getSpeedKillOrderInfoByUserAndGoodsId(userId, goodsId));
+    }
+
     public SpeedKillOrderInfoVO dtoToVo(SpeedKillOrderInfoDTO info) {
         SpeedKillOrderInfoVO vo = new SpeedKillOrderInfoVO();
         if (!ObjectUtils.isEmpty(info)) {

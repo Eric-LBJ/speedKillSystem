@@ -46,6 +46,11 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
         return goodsInfoComponent.updateByPrimaryKey(voToDto(record));
     }
 
+    @Override
+    public List<GoodsInfoVO> listSpeedKillGoods() {
+        return goodsInfoComponent.listSpeedKillGoods().stream().map(item -> dtoToVo(item)).collect(Collectors.toList());
+    }
+
     public GoodsInfoVO dtoToVo(GoodsInfoDTO info) {
         GoodsInfoVO vo = new GoodsInfoVO();
         if (!ObjectUtils.isEmpty(info)) {

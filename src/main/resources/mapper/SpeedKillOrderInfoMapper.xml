@@ -38,4 +38,10 @@
     select id, user_id, order_id, goods_id
     from speed_kill_order
   </select>
+
+  <select id="getSpeedKillOrderInfoByUserAndGoodsId" resultMap="BaseResultMap">
+    select id, user_id, order_id, goods_id
+    from speed_kill_order
+    where user_id = #{userId} and goods_id = #{goodsId}
+  </select>
 </mapper>

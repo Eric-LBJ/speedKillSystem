@@ -47,4 +47,20 @@ public interface SpeedKillGoodsInfoComponent {
      * @return
      */
     Boolean updateByPrimaryKey(SpeedKillGoodsInfoDTO record);
+
+    /**
+     * 根据商品编号更新秒杀商品信息
+     *
+     * @param record
+     * @return
+     */
+    Boolean updateByGoodsId(SpeedKillGoodsInfoDTO record);
+
+    /**
+     * 根据商品编号获取秒杀商品信息
+     *
+     * @param goodsId
+     * @return
+     */
+    SpeedKillGoodsInfoDTO getSpeedKillGoodsInfoByGoodsId(Long goodsId);
 }

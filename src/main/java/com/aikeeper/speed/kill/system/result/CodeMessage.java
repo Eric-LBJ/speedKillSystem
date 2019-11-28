@@ -49,4 +49,10 @@ public class CodeMessage {
     public static CodeMessage MOBILE_NOT_EXISTS = new CodeMessage(500202, "该手机号码未注册");
     public static CodeMessage PASSWORD_ERROR = new CodeMessage(500203, "密码错误");
 
+    /**
+     * speedKill 500300-500399
+     */
+    public static CodeMessage LACK_OF_STOCK = new CodeMessage(500300, "商品已经秒杀完了哦，下次记得早点来");
+    public static CodeMessage CAN_NOT_REPEAT_SPEED_KILL = new CodeMessage(500301, "您已经秒杀成功了哦，不能重复秒杀");
+
 }

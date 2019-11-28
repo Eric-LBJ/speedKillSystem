@@ -44,4 +44,20 @@ public class Constans {
      * cookie名称
      */
     public static final String COOKIE_NAME_TOKEN = "token";
+    /**
+     * 默认订单状态
+     */
+    public static final Byte DEFAULT_STATUS = (byte) 0;
+    /**
+     * 默认收货地址编号
+     */
+    public static final Long DEFAULT_DELIVERY_ADDRESS_ID = 10969876987L;
+    /**
+     * 默认通道
+     */
+    public static final Byte DEFAULT_ORDER_CHANNEL = (byte) 0;
+    /**
+     * 默认商品数量
+     */
+    public static final Integer DEFAULT_GOODS_COUNT = 2;
 }

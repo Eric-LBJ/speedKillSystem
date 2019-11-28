@@ -26,7 +26,8 @@
 
   <update id="updateByPrimaryKey" parameterType="com.aikeeper.speed.kill.system.domain.info.SpeedKillGoodsInfo">
     update speed_kill_goods
-    set goods_id = #{goodsId,jdbcType=BIGINT},
+    set
+      goods_id = #{goodsId,jdbcType=BIGINT},
       speed_kill_price = #{miaoshaPrice,jdbcType=DECIMAL},
       stock_count = #{stockCount,jdbcType=INTEGER},
       start_date = #{startDate,jdbcType=TIMESTAMP},
@@ -43,6 +44,34 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, goods_id, speed_kill_price, stock_count, start_date, end_date
     from speed_kill_goods
+  </select>
+
+  <update id="updateByGoodsId" parameterType="com.aikeeper.speed.kill.system.domain.info.SpeedKillGoodsInfo">
+    update speed_kill_goods
+    <set>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="speedKillPrice != null">
+        speed_kill_price = #{speedKillPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockCount != null">
+        stock_count = #{stockCount,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=TIMESTAMP}
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </update>
+
+  <select id="getSpeedKillGoodsInfoByGoodsId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, goods_id, speed_kill_price, stock_count, start_date, end_date
+    from speed_kill_goods
+    where goods_id = #{goodsId,jdbcType=BIGINT}
   </select>
 
 </mapper>

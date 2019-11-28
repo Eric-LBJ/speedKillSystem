@@ -1,20 +1,14 @@
 package com.aikeeper.speed.kill.system.controller;
 
-import com.aikeeper.speed.kill.system.api.SpeedKillUserService;
-import com.aikeeper.speed.kill.system.comm.Constans;
+import com.aikeeper.speed.kill.system.api.GoodsInfoService;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
-import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
-import org.springframework.beans.BeanUtils;
+import com.aikeeper.speed.kill.system.domain.vo.GoodsInfoVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Description: TODO
@@ -26,18 +20,37 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/goods")
 public class GoodsController {
 
+    @Resource
+    private GoodsInfoService goodsInfoService;
+
     @RequestMapping("/to_list")
-    public String toList(Model model, SpeedKillUserDTO speedKillUserDTO) {
-        model.addAttribute("user", dtoToVo(speedKillUserDTO));
+    public String toList(Model model) {
+        model.addAttribute("goodsList", goodsInfoService.listSpeedKillGoods());
         return "goods_list";
     }
 
-    private SpeedKillUserVO dtoToVo(SpeedKillUserDTO speedKillUserDTO) {
-        SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
-        if (!ObjectUtils.isEmpty(speedKillUserDTO)) {
-            BeanUtils.copyProperties(speedKillUserDTO, speedKillUserVO);
+    @RequestMapping("/to_detail/{id}")
+    public String toDetail(@PathVariable("id") Long id, Model model, SpeedKillUserDTO speedKillUserDTO) {
+        model.addAttribute("user", speedKillUserDTO);
+        GoodsInfoVO vo = goodsInfoService.selectByPrimaryKey(id);
+        model.addAttribute("goods", vo);
+
+        Long startTime = vo.getStartDate().getTime();
+        Long endTime = vo.getEndDate().getTime();
+        Long now = System.currentTimeMillis();
+
+        Integer speedKillStatus = 1;
+        Long speedKillSeconds = 0L;
+        if (now < startTime) {
+            speedKillStatus = 0;
+            speedKillSeconds = (startTime - now) / 1000;
+        } else if (now > endTime) {
+            speedKillStatus = 2;
+            speedKillSeconds = -1L;
         }
-        return speedKillUserVO;
+        model.addAttribute("speedKillStatus", speedKillStatus);
+        model.addAttribute("speedKillSeconds", speedKillSeconds);
+        return "goods_detail";
     }
 
 }

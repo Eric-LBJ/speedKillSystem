@@ -2,6 +2,7 @@ package com.aikeeper.speed.kill.system.dal;
 
 import com.aikeeper.speed.kill.system.domain.info.SpeedKillOrderInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -49,4 +50,13 @@ public interface SpeedKillOrderInfoMapper {
      * @return
      */
     Integer updateByPrimaryKey(SpeedKillOrderInfo record);
+
+    /**
+     * 根据用户id和商品id获取秒杀订单信息
+     *
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    SpeedKillOrderInfo getSpeedKillOrderInfoByUserAndGoodsId(@Param("userId") Long userId, @Param("goodsId") Long goodsId);
 }

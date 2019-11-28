@@ -49,4 +49,11 @@ public interface GoodsInfoMapper {
      * @return
      */
     Integer updateByPrimaryKey(GoodsInfo record);
+
+    /**
+     * 获取秒杀商品信息
+     *
+     * @return
+     */
+    List<GoodsInfo> listSpeedKillGoods();
 }

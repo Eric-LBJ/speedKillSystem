@@ -21,7 +21,7 @@ public class SpeedKillUserVO implements Serializable {
     /**
      * 手机号码
      */
-    private String id;
+    private Long id;
 
     /**
      * 昵称

@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 public class LoginController {
 
-    private Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Resource
     private SpeedKillUserService speedKillUserService;

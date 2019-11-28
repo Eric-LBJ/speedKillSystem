@@ -1,6 +1,7 @@
 package com.aikeeper.speed.kill.system.component;
 
 import com.aikeeper.speed.kill.system.domain.dto.OrderInfoDTO;
+import com.aikeeper.speed.kill.system.domain.info.OrderInfo;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface OrderInfoComponent {
      * @param record
      * @return
      */
-    Boolean insert(OrderInfoDTO record);
+    OrderInfoDTO insert(OrderInfoDTO record);
 
     /**
      * 根据id获取订单信息

@@ -28,7 +28,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public Boolean insert(OrderInfoVO record) {
-        return orderInfoComponent.insert(voToDto(record));
+        if (!ObjectUtils.isEmpty(orderInfoComponent.insert(voToDto(record))) &&
+                !ObjectUtils.isEmpty(orderInfoComponent.insert(voToDto(record)).getId())) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     @Override

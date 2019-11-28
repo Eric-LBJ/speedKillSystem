@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aikeeper.speed.kill.system.dal.OrderInfoMapper">
-  <resultMap id="BaseResultMap" type="com.aikeeper.speed.kill.system.domain.info.OrderInfo">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
-    <result column="delivery_add_id" jdbcType="BIGINT" property="deliveryAddId" />
-    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
-    <result column="goods_count" jdbcType="INTEGER" property="goodsCount" />
-    <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
-    <result column="order_channel" jdbcType="TINYINT" property="orderChannel" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="pay_date" jdbcType="TIMESTAMP" property="payDate" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.aikeeper.speed.kill.system.domain.info.OrderInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="goods_id" jdbcType="BIGINT" property="goodsId"/>
+        <result column="delivery_add_id" jdbcType="BIGINT" property="deliveryAddId"/>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
+        <result column="goods_count" jdbcType="INTEGER" property="goodsCount"/>
+        <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice"/>
+        <result column="order_channel" jdbcType="TINYINT" property="orderChannel"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="pay_date" jdbcType="TIMESTAMP" property="payDate"/>
+    </resultMap>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from order_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" parameterType="com.aikeeper.speed.kill.system.domain.info.OrderInfo">
-    insert into order_info (id, user_id, goods_id, 
-      delivery_add_id, goods_name, goods_count, 
-      goods_price, order_channel, status, 
-      create_date, pay_date)
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, 
-      #{deliveryAddId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsCount,jdbcType=INTEGER}, 
-      #{goodsPrice,jdbcType=DECIMAL}, #{orderChannel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP})
-  </insert>
+    <insert id="insert" parameterType="com.aikeeper.speed.kill.system.domain.info.OrderInfo">
+      <selectKey keyColumn="id" order="AFTER" keyProperty="id" resultType="long">
+          SELECT LAST_INSERT_ID() as id
+      </selectKey>
+        insert into order_info (user_id, goods_id,
+        delivery_add_id, goods_name, goods_count,
+        goods_price, order_channel, status,
+        create_date, pay_date)
+        values (#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},
+        #{deliveryAddId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsCount,jdbcType=INTEGER},
+        #{goodsPrice,jdbcType=DECIMAL}, #{orderChannel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT},
+        #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP})
+    </insert>
 
-  <update id="updateByPrimaryKey" parameterType="com.aikeeper.speed.kill.system.domain.info.OrderInfo">
+    <update id="updateByPrimaryKey" parameterType="com.aikeeper.speed.kill.system.domain.info.OrderInfo">
     update order_info
     set user_id = #{userId,jdbcType=BIGINT},
       goods_id = #{goodsId,jdbcType=BIGINT},
@@ -46,14 +49,14 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select id, user_id, goods_id, delivery_add_id, goods_name, goods_count, goods_price, 
     order_channel, status, create_date, pay_date
     from order_info
     where id = #{id,jdbcType=BIGINT}
   </select>
 
-  <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
     select id, user_id, goods_id, delivery_add_id, goods_name, goods_count, goods_price, 
     order_channel, status, create_date, pay_date
     from order_info

@@ -47,4 +47,11 @@ public interface GoodsInfoComponent {
      * @return
      */
     Boolean updateByPrimaryKey(GoodsInfoDTO record);
+
+    /**
+     * 获取秒杀商品列表信息
+     *
+     * @return
+     */
+    List<GoodsInfoDTO> listSpeedKillGoods();
 }

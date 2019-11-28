@@ -50,6 +50,12 @@ public class SpeedKillOrderInfoComponentImpl implements SpeedKillOrderInfoCompon
         return speedKillOrderInfoMapper.updateByPrimaryKey(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    @Override
+    public SpeedKillOrderInfoDTO getSpeedKillOrderInfoByUserAndGoodsId(Long userId, Long goodsId) {
+        return infoToDto(Optional.ofNullable(speedKillOrderInfoMapper
+                .getSpeedKillOrderInfoByUserAndGoodsId(userId, goodsId)).orElse(new SpeedKillOrderInfo()));
+    }
+
     public SpeedKillOrderInfoDTO infoToDto(SpeedKillOrderInfo info) {
         SpeedKillOrderInfoDTO dto = new SpeedKillOrderInfoDTO();
         if (!ObjectUtils.isEmpty(info)) {
