@@ -23,6 +23,10 @@ public class GoodsController {
     @Resource
     private GoodsInfoService goodsInfoService;
 
+    /**
+     * QPS:236
+     * 并发：5000 循环10次
+     */
     @RequestMapping("/to_list")
     public String toList(Model model) {
         model.addAttribute("goodsList", goodsInfoService.listSpeedKillGoods());
