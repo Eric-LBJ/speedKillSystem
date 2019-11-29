@@ -35,7 +35,7 @@ public class LoginController {
 
     @RequestMapping("/doLogin")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVO loginVo) {
+    public Result<String> doLogin(HttpServletResponse response, @Valid LoginVO loginVo) {
         return Result.success(speedKillUserService.userLogin(response, loginVo));
     }
 

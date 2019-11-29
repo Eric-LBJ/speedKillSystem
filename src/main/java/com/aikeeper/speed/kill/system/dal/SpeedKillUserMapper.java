@@ -15,9 +15,17 @@ public interface SpeedKillUserMapper {
 
     /**
      * 根据用户id获取用户信息
+     *
      * @param id
      * @return
      */
     SpeedKillUser getSpeedKillUserById(@Param("id") Long id);
 
+    /**
+     * 新增用户
+     *
+     * @param user
+     * @return
+     */
+    Integer insert(SpeedKillUser user);
 }

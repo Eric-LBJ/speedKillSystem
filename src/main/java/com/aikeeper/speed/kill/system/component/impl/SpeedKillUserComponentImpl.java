@@ -42,7 +42,7 @@ public class SpeedKillUserComponentImpl implements SpeedKillUserComponent {
     }
 
     @Override
-    public Boolean userLogin(HttpServletResponse response, LoginVO loginVo) {
+    public String userLogin(HttpServletResponse response, LoginVO loginVo) {
 
         SpeedKillUser speedKillUser = speedKillUserMapper.getSpeedKillUserById(Long.parseLong(loginVo.getMobile()));
         /**
@@ -63,7 +63,7 @@ public class SpeedKillUserComponentImpl implements SpeedKillUserComponent {
         String token = IdGeneratorUtils.simpleUUID();
         addCookie(response, token, speedKillUser);
 
-        return Boolean.TRUE;
+        return token;
     }
 
     @Override

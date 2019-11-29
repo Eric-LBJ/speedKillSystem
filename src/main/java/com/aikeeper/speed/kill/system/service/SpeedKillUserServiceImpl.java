@@ -30,7 +30,7 @@ public class SpeedKillUserServiceImpl implements SpeedKillUserService {
     }
 
     @Override
-    public Boolean userLogin(HttpServletResponse response, LoginVO loginVo) {
+    public String userLogin(HttpServletResponse response, LoginVO loginVo) {
        return speedKillUserComponent.userLogin(response, loginVo);
     }
 

@@ -21,4 +21,16 @@
         select * from speed_kill_user where id = #{id}
     </select>
 
+    <insert id="insert" parameterType="com.aikeeper.speed.kill.system.domain.info.SpeedKillUser">
+        insert into speed_kill_user
+        set id = #{id},
+        nick_name = #{nickName},
+        password = #{password},
+        salt = #{salt},
+        head = #{head},
+        register_date = #{registerDate},
+        last_login_date = #{lastLoginDate},
+        login_count = #{loginCount}
+    </insert>
+
 </mapper>

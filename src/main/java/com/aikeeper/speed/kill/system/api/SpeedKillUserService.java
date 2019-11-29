@@ -28,7 +28,7 @@ public interface SpeedKillUserService {
      * @param loginVo
      * @return
      */
-    Boolean userLogin(HttpServletResponse response, LoginVO loginVo);
+    String userLogin(HttpServletResponse response, LoginVO loginVo);
 
     /**
      * 根据token获取用户信息
