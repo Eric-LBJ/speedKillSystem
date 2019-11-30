@@ -41,6 +41,10 @@ public class Constans {
      */
     public static final Integer TOKEN_EXPIRE = 3600 * 24 * 2;
     /**
+     * 设置页面缓存过期时间一分钟
+     */
+    public static final Integer HTML_PAGE_EXPIRE = 60;
+    /**
      * cookie名称
      */
     public static final String COOKIE_NAME_TOKEN = "token";
