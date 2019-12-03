@@ -48,6 +48,7 @@ public class CodeMessage {
     public static CodeMessage MOBILE_FORMAT_ERROR = new CodeMessage(500201, "手机号码格式错误");
     public static CodeMessage MOBILE_NOT_EXISTS = new CodeMessage(500202, "该手机号码未注册");
     public static CodeMessage PASSWORD_ERROR = new CodeMessage(500203, "密码错误");
+    public static CodeMessage SESSION_ERROR = new CodeMessage(500204, "Session不存在或者已经失效");
 
     /**
      * speedKill 500300-500399

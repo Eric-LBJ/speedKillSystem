@@ -4,10 +4,14 @@ import com.aikeeper.speed.kill.system.api.GoodsInfoService;
 import com.aikeeper.speed.kill.system.api.RedisService;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.GoodsKey;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.vo.GoodsDetailVo;
 import com.aikeeper.speed.kill.system.domain.vo.GoodsInfoVO;
-import org.springframework.context.MessageSource;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
+import com.aikeeper.speed.kill.system.result.Result;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +22,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 /**
  * @Description: TODO
@@ -116,6 +121,51 @@ public class GoodsController {
             redisService.set(GoodsKey.goodsDetailKey, id.toString(), html);
         }
         return html;
+    }
+
+    @RequestMapping(value = "/detail/{goodsId}")
+    @ResponseBody
+    public Result<GoodsDetailVo> detail(SpeedKillUserDTO user, @PathVariable("goodsId") long goodsId) {
+        GoodsInfoVO goodsInfoVO = goodsInfoService.selectByPrimaryKey(goodsId);
+        Long startAt = goodsInfoVO.getStartDate().getTime();
+        Long endAt = goodsInfoVO.getEndDate().getTime();
+        Long now = System.currentTimeMillis();
+        Integer speedKillStatus = 0;
+        Integer remainSeconds = 0;
+
+        if (now < startAt) {
+            /**
+             * 秒杀还没开始，倒计时
+             */
+            speedKillStatus = 0;
+            remainSeconds = (int) ((startAt - now) / 1000);
+        } else if (now > endAt) {
+            /**
+             * 秒杀已经结束
+             */
+            speedKillStatus = 2;
+            remainSeconds = -1;
+        } else {
+            /**
+             * 秒杀进行中
+             */
+            speedKillStatus = 1;
+            remainSeconds = 0;
+        }
+        GoodsDetailVo vo = new GoodsDetailVo();
+        vo.setGoodsInfoVO(goodsInfoVO);
+        vo.setSpeedKillUserVO(userDtoToVo(user));
+        vo.setRemainSeconds(remainSeconds);
+        vo.setSpeedKillStatus(speedKillStatus);
+        return Result.success(vo);
+    }
+
+    private SpeedKillUserVO userDtoToVo(SpeedKillUserDTO user) {
+        SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
+        if (!ObjectUtils.isEmpty(user)) {
+            BeanUtils.copyProperties(user, speedKillUserVO);
+        }
+        return speedKillUserVO;
     }
 
 }
