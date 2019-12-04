@@ -77,9 +77,8 @@ function doSpeedKill(){
 			goodsId:$("#goodsId").val(),
 		},
 		success:function(data){
-		    console.log(data);
 			if(data.code == 200){
-				window.location.href="/order_detail.htm?orderId="+data.data.id;
+				window.location.href="/order_detail.htm?orderId="+data.data.orderInfoVO.id;
 			}else{
 				layer.msg(data.msg);
 			}
@@ -117,7 +116,6 @@ $(function(){
 
 function getDetail(){
 	var goodsId = g_getQueryString("goodsId");
-	console.log("goodsId = " + goodsId)
 	$.ajax({
 		url:"/goods/detail/"+goodsId,
 		type:"GET",

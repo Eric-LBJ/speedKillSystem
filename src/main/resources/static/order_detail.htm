@@ -62,6 +62,8 @@
 function render(detail){
 	var goods = detail.goodsInfoVO;
 	var order = detail.orderInfoVO;
+	console.log("goods:" + goods);
+    console.log("order:" + order);
 	$("#goodsName").text(goods.goodsName);
 	$("#goodsImg").attr("src", goods.goodsImg);
 	$("#orderPrice").text(order.goodsPrice);
@@ -86,13 +88,16 @@ function getOrderDetail(){
 		url:"/order/orderDetail",
 		type:"GET",
 		data:{
-			orderId:orderId
+			orderId:Number(orderId)
 		},
 		success:function(data){
+            console.log("dataCode:" + data.code);
 			if(data.code == 200){
+                console.log("data:" + data.data);
 				render(data.data);
 			}else{
 				layer.msg(data.msg);
+                window.location.href="/order_detail.htm?orderId="+data.data.orderInfoVO.id;
 			}
 		},
 		error:function(){
