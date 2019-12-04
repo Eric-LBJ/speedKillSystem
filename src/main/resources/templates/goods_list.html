@@ -31,13 +31,13 @@
             <td>库存数量</td>
             <td>详情</td>
         </tr>
-        <tr th:each="goods : ${goodsList}">
-            <td th:text="${goods.goodsName}"></td>
-            <td><img th:src="@{${goods.goodsImg}}" width="100" height="100"/></td>
-            <td th:text="${goods.goodsPrice}"></td>
-            <td th:text="${goods.speedKillPrice}"></td>
-            <td th:text="${goods.stockCount}"></td>
-            <td><a th:href="'/goods_detail.htm?goodsId='+${goods.id}">详情</a></td>
+        <tr th:each="goodsInfoVO : ${goodsList}">
+            <td th:text="${goodsInfoVO.goodsName}"></td>
+            <td><img th:src="@{${goodsInfoVO.goodsImg}}" width="100" height="100"/></td>
+            <td th:text="${goodsInfoVO.goodsPrice}"></td>
+            <td th:text="${goodsInfoVO.speedKillPrice}"></td>
+            <td th:text="${goodsInfoVO.stockCount}"></td>
+            <td><a th:href="'/goods_detail.htm?goodsId='+${goodsInfoVO.id}">详情</a></td>
         </tr>
     </table>
 </div>

@@ -56,4 +56,10 @@ public class CodeMessage {
     public static CodeMessage LACK_OF_STOCK = new CodeMessage(500300, "商品已经秒杀完了哦，下次记得早点来");
     public static CodeMessage CAN_NOT_REPEAT_SPEED_KILL = new CodeMessage(500301, "您已经秒杀成功了哦，不能重复秒杀");
 
+    /**
+     * order 500400-500499
+     */
+    public static CodeMessage ORDER_NOT_EXIST = new CodeMessage(500400, "订单信息不存在");
+    public static CodeMessage GOODS_OF_ORDER_NOT_EXIST = new CodeMessage(500401, "未找到订单关联商品信息");
+
 }

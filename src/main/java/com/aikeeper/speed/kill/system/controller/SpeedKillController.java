@@ -85,7 +85,6 @@ public class SpeedKillController {
          * 判断库存
          */
         SpeedKillGoodsInfoVO speedKillGoodsInfoVO = speedKillGoodsInfoService.selectByPrimaryKey(goodsId);
-        System.out.println(speedKillGoodsInfoVO.toString());
         if (ObjectUtils.isEmpty(speedKillGoodsInfoVO) || speedKillGoodsInfoVO.getStockCount() <= 0) {
             return Result.error(CodeMessage.LACK_OF_STOCK);
         }

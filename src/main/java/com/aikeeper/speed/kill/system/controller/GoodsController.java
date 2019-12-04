@@ -22,7 +22,6 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
 
 /**
  * @Description: TODO

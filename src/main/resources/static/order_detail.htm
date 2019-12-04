@@ -60,8 +60,8 @@
 </html>
 <script>
 function render(detail){
-	var goods = detail.goods;
-	var order = detail.order;
+	var goods = detail.goodsInfoVO;
+	var order = detail.orderInfoVO;
 	$("#goodsName").text(goods.goodsName);
 	$("#goodsImg").attr("src", goods.goodsImg);
 	$("#orderPrice").text(order.goodsPrice);
@@ -82,8 +82,9 @@ $(function(){
 
 function getOrderDetail(){
 	var orderId = g_getQueryString("orderId");
+    alert(orderId);
 	$.ajax({
-		url:"/order/detail",
+		url:"/order/orderDetail",
 		type:"GET",
 		data:{
 			orderId:orderId
