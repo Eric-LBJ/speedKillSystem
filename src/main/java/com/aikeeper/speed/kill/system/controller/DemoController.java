@@ -4,6 +4,7 @@ import com.aikeeper.speed.kill.system.api.RedisService;
 import com.aikeeper.speed.kill.system.api.UserService;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.UserKey;
 import com.aikeeper.speed.kill.system.domain.info.User;
+import com.aikeeper.speed.kill.system.mq.MQProvider;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
 import com.aikeeper.speed.kill.system.result.Result;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,15 @@ public class DemoController {
     @Resource
     private RedisService redisService;
 
+    @Resource
+    private MQProvider mqProvider;
+
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq() {
+        mqProvider.send("this is my send data");
+        return Result.success("hello RabbitMQ");
+    }
 
     @RequestMapping("/home")
     @ResponseBody

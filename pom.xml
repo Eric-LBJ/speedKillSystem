@@ -92,6 +92,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!--RabbitMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
         <!--tomcat:provided意思是只在编译时依赖,打war包的需要的依赖-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
