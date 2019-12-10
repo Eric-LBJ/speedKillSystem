@@ -54,4 +54,12 @@ public interface GoodsInfoComponent {
      * @return
      */
     List<GoodsInfoDTO> listSpeedKillGoods();
+
+    /**
+     * 更新库存
+     *
+     * @param record
+     * @return
+     */
+    Boolean reduceGoodsStock(GoodsInfoDTO record);
 }

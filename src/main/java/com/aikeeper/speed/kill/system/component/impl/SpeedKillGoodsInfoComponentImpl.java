@@ -60,6 +60,11 @@ public class SpeedKillGoodsInfoComponentImpl implements SpeedKillGoodsInfoCompon
         return infoToDto(Optional.ofNullable(speedKillGoodsInfoMapper.getSpeedKillGoodsInfoByGoodsId(goodsId)).orElse(new SpeedKillGoodsInfo()));
     }
 
+    @Override
+    public Boolean reduceStockCount(SpeedKillGoodsInfoDTO record) {
+        return speedKillGoodsInfoMapper.reduceStockCount(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
     public SpeedKillGoodsInfoDTO infoToDto(SpeedKillGoodsInfo info){
         SpeedKillGoodsInfoDTO dto = new SpeedKillGoodsInfoDTO();
         if (!ObjectUtils.isEmpty(info)){

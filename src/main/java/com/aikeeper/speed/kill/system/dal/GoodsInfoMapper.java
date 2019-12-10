@@ -56,4 +56,12 @@ public interface GoodsInfoMapper {
      * @return
      */
     List<GoodsInfo> listSpeedKillGoods();
+
+    /**
+     * 更新库存
+     *
+     * @param record
+     * @return
+     */
+    Integer reduceGoodsStock(GoodsInfo record);
 }

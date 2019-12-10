@@ -37,23 +37,23 @@ public class UserUtils {
         }
 
         		//插入数据库
-		Connection conn = DBUtil.getConn();
-		String sql = "insert into speed_kill_user(login_count, nick_name, register_date, salt, password, id)values(?,?,?,?,?,?)";
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		for(int i=0;i<users.size();i++) {
-            SpeedKillUser user = users.get(i);
-			pstmt.setInt(1, user.getLoginCount());
-			pstmt.setString(2, user.getNickName());
-			pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
-			pstmt.setString(4, user.getSalt());
-			pstmt.setString(5, user.getPassword());
-			pstmt.setLong(6, user.getId());
-			pstmt.addBatch();
-		}
-		pstmt.executeBatch();
-		pstmt.close();
-		conn.close();
-		System.out.println("insert to db");
+//		Connection conn = DBUtil.getConn();
+//		String sql = "insert into speed_kill_user(login_count, nick_name, register_date, salt, password, id)values(?,?,?,?,?,?)";
+//		PreparedStatement pstmt = conn.prepareStatement(sql);
+//		for(int i=0;i<users.size();i++) {
+//            SpeedKillUser user = users.get(i);
+//			pstmt.setInt(1, user.getLoginCount());
+//			pstmt.setString(2, user.getNickName());
+//			pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
+//			pstmt.setString(4, user.getSalt());
+//			pstmt.setString(5, user.getPassword());
+//			pstmt.setLong(6, user.getId());
+//			pstmt.addBatch();
+//		}
+//		pstmt.executeBatch();
+//		pstmt.close();
+//		conn.close();
+//		System.out.println("insert to db");
 
         //登录，生成token
         String urlString = "http://localhost:8080/login/doLogin";

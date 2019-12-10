@@ -74,4 +74,14 @@
         left join speed_kill_goods skg
         on g.`id` = skg.`goods_id`
     </select>
+
+    <update id="reduceGoodsStock" parameterType="com.aikeeper.speed.kill.system.domain.info.GoodsInfo">
+        update goods
+        <set>
+            <if test="goodsStock != null">
+                goods_stock = #{goodsStock,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT} and goods_stock > 0
+    </update>
 </mapper>

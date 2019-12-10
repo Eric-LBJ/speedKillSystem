@@ -57,6 +57,11 @@ public class GoodsInfoComponentImpl implements GoodsInfoComponent {
                 .orElse(new ArrayList<>()).stream().map(item -> infoToDto(item)).collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean reduceGoodsStock(GoodsInfoDTO record) {
+        return goodsInfoMapper.reduceGoodsStock(dtoToInfo(record)) > 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
     public GoodsInfoDTO infoToDto(GoodsInfo info) {
         GoodsInfoDTO dto = new GoodsInfoDTO();
         if (!ObjectUtils.isEmpty(info)) {

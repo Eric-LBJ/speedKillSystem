@@ -63,4 +63,12 @@ public interface SpeedKillGoodsInfoComponent {
      * @return
      */
     SpeedKillGoodsInfoDTO getSpeedKillGoodsInfoByGoodsId(Long goodsId);
+
+    /**
+     * 减库存
+     *
+     * @param record
+     * @return
+     */
+    Boolean reduceStockCount(SpeedKillGoodsInfoDTO record);
 }

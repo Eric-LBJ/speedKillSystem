@@ -38,8 +38,8 @@ public class SpeedKillComponentImpl implements SpeedKillComponent {
         /**
          * 1、减少库存
          */
-        Boolean goodsStockIsReduce = goodsInfoComponent.updateByPrimaryKey(packageGoodsDto(goodsInfoDTO));
-        Boolean speedKillGoodsStockIsReduce = speedKillGoodsInfoComponent.updateByGoodsId(packageSpeedKillGoodsDto(goodsInfoDTO));
+        Boolean goodsStockIsReduce = goodsInfoComponent.reduceGoodsStock(packageGoodsDto(goodsInfoDTO));
+        Boolean speedKillGoodsStockIsReduce = speedKillGoodsInfoComponent.reduceStockCount(packageSpeedKillGoodsDto(goodsInfoDTO));
 
         /**
          * 向订单表插入数据

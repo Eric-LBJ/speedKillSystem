@@ -74,4 +74,14 @@
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </select>
 
+  <update id="reduceStockCount" parameterType="com.aikeeper.speed.kill.system.domain.info.SpeedKillGoodsInfo">
+    update speed_kill_goods
+    <set>
+      <if test="stockCount != null">
+        stock_count = #{stockCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=BIGINT} and stock_count > 0
+  </update>
+
 </mapper>
