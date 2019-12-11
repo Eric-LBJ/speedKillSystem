@@ -74,4 +74,10 @@
         left join speed_kill_goods skg
         on g.`id` = skg.`goods_id`
     </select>
+
+    <update id="reduceStockByGoodsId">
+        update goods
+        set goods_stock = goods_stock - 1
+        where id = #{id,jdbcType=BIGINT} and goods_stock > 0
+    </update>
 </mapper>

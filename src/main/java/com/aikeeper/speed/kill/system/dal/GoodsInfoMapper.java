@@ -2,6 +2,7 @@ package com.aikeeper.speed.kill.system.dal;
 
 import com.aikeeper.speed.kill.system.domain.info.GoodsInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -56,4 +57,12 @@ public interface GoodsInfoMapper {
      * @return
      */
     List<GoodsInfo> listSpeedKillGoods();
+
+    /**
+     * 减库存
+     *
+     * @param id
+     * @return
+     */
+    Integer reduceStockByGoodsId(@Param("id") Long id);
 }

@@ -66,4 +66,12 @@ public interface SpeedKillGoodsInfoMapper {
      * @return
      */
     SpeedKillGoodsInfo getSpeedKillGoodsInfoByGoodsId(@Param("goodsId") Long goodsId);
+
+    /**
+     * 减库存
+     *
+     * @param goodsId
+     * @return
+     */
+    Integer reduceStockByGoodsId(@Param("goodsId") Long goodsId);
 }
