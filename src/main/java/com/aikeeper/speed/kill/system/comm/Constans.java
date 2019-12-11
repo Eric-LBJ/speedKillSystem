@@ -69,23 +69,35 @@ public class Constans {
      */
     public final static String QUEUE_NAME = "queue";
     /**
-     * MQ Topic
+     * MQ Topic Queue
      */
-    public final static String TOPIC_FIRST = "topic_1";
+    public final static String TOPIC_QUEUE_FIRST = "topic_queue_1";
     /**
-     * MQ Topic
+     * MQ Topic Queue
      */
-    public final static String TOPIC_SECOND= "topic_2";
+    public final static String TOPIC_QUEUE_SECOND= "topic_queue_2";
     /**
-     * MQ Exchange
+     * MQ topic Exchange
      */
     public final static String TOPIC_EXCHANGE= "topicExchange";
     /**
-     * topic key
+     * Topic Key
      */
     public final static String TOPIC_KEY_FIRST= "topic.key1";
     /**
-     * topic key '#'通配符代表一个或多个任意字符
+     * Topic Key '#'通配符代表一个或多个任意字符
      */
     public final static String TOPIC_KEY_SECOND= "topic.#";
+    /**
+     * MQ Fanout Exchange
+     */
+    public final static String FANOUT_EXCHANGE= "fanoutExchange";
+    /**
+     * MQ Headers Exchange
+     */
+    public final static String HEADERS_EXCHANGE= "headersExchange";
+    /**
+     * MQ Headers Queue
+     */
+    public final static String HEADERS_QUEUE = "headers_queue";
 }

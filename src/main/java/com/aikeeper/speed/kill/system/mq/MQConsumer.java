@@ -22,14 +22,19 @@ public class MQConsumer {
         logger.info("consumer data : " + data);
     }
 
-    @RabbitListener(queues = Constans.TOPIC_FIRST)
-    public void consumerFirstTopic(String data) {
-        logger.info("consumer first topic data : " + data);
+    @RabbitListener(queues = Constans.TOPIC_QUEUE_FIRST)
+    public void consumerFirstTopicOrFanout(String data) {
+        logger.info("consumer first topic or fanout data : " + data);
     }
 
-    @RabbitListener(queues = Constans.TOPIC_SECOND)
-    public void consumerSecondTopic(String data) {
-        logger.info("consumer second topic data : " + data);
+    @RabbitListener(queues = Constans.TOPIC_QUEUE_SECOND)
+    public void consumerSecondTopicOrFanout(String data) {
+        logger.info("consumer second topic or fanout data : " + data);
+    }
+
+    @RabbitListener(queues = Constans.HEADERS_QUEUE)
+    public void consumerHeaders(byte[] data) {
+        logger.info("consumer headers data : " + new String(data));
     }
 
 }

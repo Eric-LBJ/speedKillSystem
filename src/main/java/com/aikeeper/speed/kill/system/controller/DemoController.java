@@ -47,6 +47,20 @@ public class DemoController {
         return Result.success("hello RabbitMQ");
     }
 
+    @RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result<String> mqFanout() {
+        mqProvider.sendWithFanout("this is my send fanout data");
+        return Result.success("hello RabbitMQ");
+    }
+
+    @RequestMapping("/mq/headers")
+    @ResponseBody
+    public Result<String> mqHeaders() {
+        mqProvider.sendWithHeaders("this is my send headers data");
+        return Result.success("hello RabbitMQ");
+    }
+
     @RequestMapping("/home")
     @ResponseBody
     public String home() {
