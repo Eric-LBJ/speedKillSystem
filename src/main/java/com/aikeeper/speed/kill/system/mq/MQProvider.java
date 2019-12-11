@@ -1,6 +1,6 @@
 package com.aikeeper.speed.kill.system.mq;
 
-import com.aikeeper.speed.kill.system.config.MQConfig;
+import com.aikeeper.speed.kill.system.comm.Constans;
 import com.aikeeper.speed.kill.system.utils.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,14 @@ public class MQProvider {
     public void send(Object message) {
         String data = ConvertUtils.beanToString(message);
         logger.info("send data : " + data);
-        amqpTemplate.convertAndSend(MQConfig.QUEUE_NAME,data);
+        amqpTemplate.convertAndSend(Constans.QUEUE_NAME, data);
+    }
+
+    public void sendWithTopic(Object message) {
+        String data = ConvertUtils.beanToString(message);
+        logger.info("send data : " + data);
+        amqpTemplate.convertAndSend(Constans.TOPIC_EXCHANGE, Constans.TOPIC_KEY_FIRST, data + "---First");
+        amqpTemplate.convertAndSend(Constans.TOPIC_EXCHANGE, Constans.TOPIC_KEY_SECOND, data + "---Second");
     }
 
 }

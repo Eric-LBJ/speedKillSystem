@@ -40,6 +40,13 @@ public class DemoController {
         return Result.success("hello RabbitMQ");
     }
 
+    @RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result<String> mqTopic() {
+        mqProvider.sendWithTopic("this is my send topic data");
+        return Result.success("hello RabbitMQ");
+    }
+
     @RequestMapping("/home")
     @ResponseBody
     public String home() {

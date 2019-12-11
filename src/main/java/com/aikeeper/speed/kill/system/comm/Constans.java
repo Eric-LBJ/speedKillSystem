@@ -64,4 +64,28 @@ public class Constans {
      * 默认商品数量
      */
     public static final Integer DEFAULT_GOODS_COUNT = 2;
+    /**
+     * MQ
+     */
+    public final static String QUEUE_NAME = "queue";
+    /**
+     * MQ Topic
+     */
+    public final static String TOPIC_FIRST = "topic_1";
+    /**
+     * MQ Topic
+     */
+    public final static String TOPIC_SECOND= "topic_2";
+    /**
+     * MQ Exchange
+     */
+    public final static String TOPIC_EXCHANGE= "topicExchange";
+    /**
+     * topic key
+     */
+    public final static String TOPIC_KEY_FIRST= "topic.key1";
+    /**
+     * topic key '#'通配符代表一个或多个任意字符
+     */
+    public final static String TOPIC_KEY_SECOND= "topic.#";
 }

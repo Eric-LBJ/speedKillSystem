@@ -1,6 +1,6 @@
 package com.aikeeper.speed.kill.system.mq;
 
-import com.aikeeper.speed.kill.system.config.MQConfig;
+import com.aikeeper.speed.kill.system.comm.Constans;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,12 +17,19 @@ public class MQConsumer {
 
     private Logger logger = LoggerFactory.getLogger(MQConsumer.class);
 
-    /**
-     * Direct交换机模式  Exchange
-     */
-    @RabbitListener(queues = MQConfig.QUEUE_NAME)
+    @RabbitListener(queues = Constans.QUEUE_NAME)
     public void consumer(String data) {
         logger.info("consumer data : " + data);
+    }
+
+    @RabbitListener(queues = Constans.TOPIC_FIRST)
+    public void consumerFirstTopic(String data) {
+        logger.info("consumer first topic data : " + data);
+    }
+
+    @RabbitListener(queues = Constans.TOPIC_SECOND)
+    public void consumerSecondTopic(String data) {
+        logger.info("consumer second topic data : " + data);
     }
 
 }
