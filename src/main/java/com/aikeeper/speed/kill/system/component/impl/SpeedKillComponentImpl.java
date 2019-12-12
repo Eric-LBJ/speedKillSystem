@@ -1,14 +1,16 @@
 package com.aikeeper.speed.kill.system.component.impl;
 
 import com.aikeeper.speed.kill.system.comm.Constans;
+import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.SpeedKillKey;
 import com.aikeeper.speed.kill.system.component.*;
-import com.aikeeper.speed.kill.system.domain.dto.GoodsInfoDTO;
-import com.aikeeper.speed.kill.system.domain.dto.OrderInfoDTO;
-import com.aikeeper.speed.kill.system.domain.dto.SpeedKillOrderInfoDTO;
-import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.dal.RedisDao;
+import com.aikeeper.speed.kill.system.domain.dto.*;
+import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -34,27 +36,46 @@ public class SpeedKillComponentImpl implements SpeedKillComponent {
     @Resource
     private SpeedKillOrderInfoComponent speedKillOrderInfoComponent;
 
+    @Resource
+    private RedisDao redisDao;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public OrderInfoDTO speedKillGoods(SpeedKillUserDTO speedKillUserDTO, GoodsInfoDTO goodsInfoDTO) {
-        /**
-         * 1、减少秒杀商品表库存
-         */
-        Boolean speedKillGoodsStockIsReduce = speedKillGoodsInfoComponent.reduceStockByGoodsId(goodsInfoDTO.getId());
+        return speedKill(speedKillUserDTO, goodsInfoDTO);
+    }
 
-        if (speedKillGoodsStockIsReduce) {
-            /**
-             * 2、减少商品表库存
-             */
-            Boolean goodsStockIsReduce = goodsInfoComponent.reduceStockByGoodsId(goodsInfoDTO.getId());
-            /**
-             * 3、向订单表插入数据
-             */
-            OrderInfoDTO orderInfoDTO = orderInfoComponent.insert(packageOrderInfoDto(speedKillUserDTO, goodsInfoDTO));
-            Boolean speedKillOrderInfoIsInsert = speedKillOrderInfoComponent.insert(packageSpeedKillOrderInfoDto(speedKillUserDTO, orderInfoDTO));
-            return goodsStockIsReduce && speedKillOrderInfoIsInsert ? orderInfoDTO : null;
+    @Override
+    public void mqSpeedKill(SpeedKillMessage message) {
+        /**
+         * 判断库存
+         */
+        SpeedKillGoodsInfoDTO speedKillGoodsInfoDTO = speedKillGoodsInfoComponent.selectByPrimaryKey(message.getGoodsId());
+        if (ObjectUtils.isEmpty(speedKillGoodsInfoDTO) || speedKillGoodsInfoDTO.getStockCount() <= 0) {
+            redisDao.set(SpeedKillKey.goodsOverKey, "" + speedKillGoodsInfoDTO.getGoodsId(), Boolean.TRUE);
+            return;
         }
-        return null;
+        /**
+         * 判断是否已经秒杀到了，每个用户id只能秒杀一次
+         */
+        SpeedKillOrderInfoDTO speedKillOrderInfoDTO = speedKillOrderInfoComponent
+                .getSpeedKillOrderInfoByUserAndGoodsId(message.getSpeedKillUserDTO().getId(), message.getGoodsId());
+        if (!ObjectUtils.isEmpty(speedKillOrderInfoDTO) && !ObjectUtils.isEmpty(speedKillOrderInfoDTO.getId())) {
+            return;
+        }
+        speedKill(message.getSpeedKillUserDTO(), goodsInfoComponent.selectByPrimaryKey(message.getGoodsId()));
+    }
+
+    @Override
+    public Long getSpeedKillResult(Long userId, Long goodsId) {
+        SpeedKillOrderInfoDTO speedKillOrderInfoDTO = speedKillOrderInfoComponent.getSpeedKillOrderInfoByUserAndGoodsId(userId, goodsId);
+        if (!ObjectUtils.isEmpty(speedKillOrderInfoDTO) && !StringUtils.isEmpty(speedKillOrderInfoDTO.getOrderId())) {
+            return speedKillOrderInfoDTO.getOrderId();
+        }
+        if (redisDao.exists(SpeedKillKey.goodsOverKey, "" + goodsId)) {
+            return -1L;
+        }
+        return 0L;
     }
 
     private SpeedKillOrderInfoDTO packageSpeedKillOrderInfoDto(SpeedKillUserDTO speedKillUserDTO, OrderInfoDTO orderInfoDTO) {
@@ -77,6 +98,28 @@ public class SpeedKillComponentImpl implements SpeedKillComponent {
         orderInfoDTO.setStatus(Constans.DEFAULT_STATUS);
         orderInfoDTO.setCreateDate(new Date());
         return orderInfoDTO;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public OrderInfoDTO speedKill(SpeedKillUserDTO speedKillUserDTO, GoodsInfoDTO goodsInfoDTO) {
+        /**
+         * 1、减少秒杀商品表库存
+         */
+        Boolean speedKillGoodsStockIsReduce = speedKillGoodsInfoComponent.reduceStockByGoodsId(goodsInfoDTO.getId());
+
+        if (speedKillGoodsStockIsReduce) {
+            /**
+             * 2、减少商品表库存
+             */
+            Boolean goodsStockIsReduce = goodsInfoComponent.reduceStockByGoodsId(goodsInfoDTO.getId());
+            /**
+             * 3、向订单表插入数据
+             */
+            OrderInfoDTO orderInfoDTO = orderInfoComponent.insert(packageOrderInfoDto(speedKillUserDTO, goodsInfoDTO));
+            Boolean speedKillOrderInfoIsInsert = speedKillOrderInfoComponent.insert(packageSpeedKillOrderInfoDto(speedKillUserDTO, orderInfoDTO));
+            return goodsStockIsReduce && speedKillOrderInfoIsInsert ? orderInfoDTO : null;
+        }
+        return null;
     }
 
 }

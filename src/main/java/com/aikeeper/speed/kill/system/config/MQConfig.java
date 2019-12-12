@@ -99,4 +99,12 @@ public class MQConfig {
         return BindingBuilder.bind(headersQueue()).to(headersExchange()).whereAll(map).match();
     }
 
+    /**
+     * 秒杀优化
+     */
+    @Bean
+    public Queue speedKillQueue() {
+        return new Queue(Constans.SPEED_KILL_QUEUE_NAME, Boolean.TRUE);
+    }
+
 }

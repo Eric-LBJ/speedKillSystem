@@ -3,6 +3,7 @@ package com.aikeeper.speed.kill.system.component;
 import com.aikeeper.speed.kill.system.domain.dto.GoodsInfoDTO;
 import com.aikeeper.speed.kill.system.domain.dto.OrderInfoDTO;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 
 /**
  * @Description: TODO
@@ -21,4 +22,19 @@ public interface SpeedKillComponent {
      */
     OrderInfoDTO speedKillGoods(SpeedKillUserDTO speedKillUserDTO, GoodsInfoDTO goodsInfoDTO);
 
+    /**
+     * mq 秒杀
+     *
+     * @param message
+     */
+    void mqSpeedKill(SpeedKillMessage message);
+
+    /**
+     * 获取秒杀结果
+     *
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    Long getSpeedKillResult(Long userId, Long goodsId);
 }

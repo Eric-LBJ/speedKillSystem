@@ -1,5 +1,6 @@
 package com.aikeeper.speed.kill.system.api;
 
+import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 import com.aikeeper.speed.kill.system.domain.vo.GoodsInfoVO;
 import com.aikeeper.speed.kill.system.domain.vo.OrderInfoVO;
 import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
@@ -21,4 +22,19 @@ public interface SpeedKillService {
      */
     OrderInfoVO speedKillGoods(SpeedKillUserVO speedKillUserVO, GoodsInfoVO goodsInfoVO);
 
+    /**
+     * mq消费者秒杀
+     *
+     * @param message
+     */
+    void mqSpeedKill(SpeedKillMessage message);
+
+    /**
+     * 获取秒杀结果
+     *
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    Long getSpeedKillResult(Long userId, Long goodsId);
 }

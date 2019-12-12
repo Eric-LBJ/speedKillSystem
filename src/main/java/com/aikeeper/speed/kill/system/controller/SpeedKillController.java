@@ -1,14 +1,16 @@
 package com.aikeeper.speed.kill.system.controller;
 
-import com.aikeeper.speed.kill.system.api.GoodsInfoService;
-import com.aikeeper.speed.kill.system.api.SpeedKillGoodsInfoService;
-import com.aikeeper.speed.kill.system.api.SpeedKillOrderInfoService;
-import com.aikeeper.speed.kill.system.api.SpeedKillService;
+import com.aikeeper.speed.kill.system.api.*;
+import com.aikeeper.speed.kill.system.comm.Constans;
+import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.GoodsKey;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 import com.aikeeper.speed.kill.system.domain.vo.*;
+import com.aikeeper.speed.kill.system.mq.MQProvider;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
 import com.aikeeper.speed.kill.system.result.Result;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @Description: TODO
@@ -27,7 +32,7 @@ import javax.annotation.Resource;
  **/
 @Controller
 @RequestMapping("/speed/kill")
-public class SpeedKillController {
+public class SpeedKillController implements InitializingBean {
 
     @Resource
     private GoodsInfoService goodsInfoService;
@@ -40,6 +45,30 @@ public class SpeedKillController {
 
     @Resource
     private SpeedKillService speedKillService;
+
+    @Resource
+    private RedisService redisService;
+
+    @Resource
+    private MQProvider mqProvider;
+
+    private final ConcurrentMap<Long, Boolean> cacheMap = new ConcurrentHashMap<>();
+
+    /**
+     * 系统初始化时将秒杀商品库存放到redis
+     *
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        List<SpeedKillGoodsInfoVO> speedKillGoodsInfoVOList = speedKillGoodsInfoService.selectAll();
+        if (!ObjectUtils.isEmpty(speedKillGoodsInfoVOList)) {
+            speedKillGoodsInfoVOList.forEach(item -> {
+                redisService.set(GoodsKey.speedGoodsStockKey, "" + item.getGoodsId(), item.getStockCount());
+                cacheMap.putIfAbsent(item.getGoodsId(), Boolean.FALSE);
+            });
+        }
+    }
 
     @RequestMapping("/do_speed_kill")
     public String doSpeedKill(@RequestParam("goodsId") Long goodsId, Model model, SpeedKillUserDTO speedKillUserDTO) {
@@ -76,7 +105,7 @@ public class SpeedKillController {
 
     @RequestMapping(value = "/kill", method = RequestMethod.POST)
     @ResponseBody
-    public Result<OrderDetailVo> cacheKill(@RequestParam("goodsId") Long goodsId,SpeedKillUserDTO speedKillUserDTO) {
+    public Result<OrderDetailVo> cacheKill(@RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
 
         if (ObjectUtils.isEmpty(speedKillUserDTO)) {
             return Result.error(CodeMessage.SESSION_ERROR);
@@ -104,6 +133,55 @@ public class SpeedKillController {
         vo.setGoodsInfoVO(goodsInfoService.selectByPrimaryKey(goodsId));
         vo.setOrderInfoVO(orderInfoVO);
         return Result.success(vo);
+    }
+
+    @RequestMapping(value = "/mqKill", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<Integer> mqKill(@RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+
+        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
+            return Result.error(CodeMessage.SESSION_ERROR);
+        }
+
+        /**
+         * 判断库存 ,使用本地缓存，减少对redis的访问
+         */
+        if (cacheMap.getOrDefault(goodsId, Boolean.FALSE)) {
+            return Result.error(CodeMessage.LACK_OF_STOCK);
+        }
+        Long currentStock = redisService.decr(GoodsKey.speedGoodsStockKey, "" + goodsId);
+        if (currentStock == 0L) {
+            cacheMap.put(goodsId, Boolean.TRUE);
+        }
+
+        /**
+         * 判断是否已经秒杀到了，每个用户id只能秒杀一次
+         */
+        SpeedKillOrderInfoVO speedKillOrderInfoVO = speedKillOrderInfoService.getSpeedKillOrderInfoByUserAndGoodsId(speedKillUserDTO.getId(), goodsId);
+        if (!ObjectUtils.isEmpty(speedKillOrderInfoVO) && !ObjectUtils.isEmpty(speedKillOrderInfoVO.getId())) {
+            return Result.error(CodeMessage.CAN_NOT_REPEAT_SPEED_KILL);
+        }
+
+        /**
+         * 入队
+         */
+        SpeedKillMessage speedKillMessage = new SpeedKillMessage();
+        speedKillMessage.setSpeedKillUserDTO(speedKillUserDTO);
+        speedKillMessage.setGoodsId(goodsId);
+        mqProvider.sendSpeedKillMessage(speedKillMessage);
+
+        return Result.success(Constans.RESPONSE_DATA_ZERO);
+    }
+
+    @RequestMapping(value = "/result", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<Long> result(Model model, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+        model.addAttribute("user", speedKillUserDTO);
+        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
+            return Result.error(CodeMessage.SESSION_ERROR);
+        }
+        Long result = speedKillService.getSpeedKillResult(speedKillUserDTO.getId(), goodsId);
+        return Result.success(result);
     }
 
     private static SpeedKillUserVO dtoToVo(SpeedKillUserDTO speedKillUserDTO) {

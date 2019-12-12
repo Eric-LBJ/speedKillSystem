@@ -5,6 +5,7 @@ import com.aikeeper.speed.kill.system.component.SpeedKillComponent;
 import com.aikeeper.speed.kill.system.domain.dto.GoodsInfoDTO;
 import com.aikeeper.speed.kill.system.domain.dto.OrderInfoDTO;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 import com.aikeeper.speed.kill.system.domain.vo.GoodsInfoVO;
 import com.aikeeper.speed.kill.system.domain.vo.OrderInfoVO;
 import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
@@ -29,6 +30,16 @@ public class SpeedKillServiceImpl implements SpeedKillService {
     @Override
     public OrderInfoVO speedKillGoods(SpeedKillUserVO speedKillUserVO, GoodsInfoVO goodsInfoVO) {
         return dtoToVo(speedKillComponent.speedKillGoods(userVoToDto(speedKillUserVO),goodsVoToDto(goodsInfoVO)));
+    }
+
+    @Override
+    public void mqSpeedKill(SpeedKillMessage message) {
+        speedKillComponent.mqSpeedKill(message);
+    }
+
+    @Override
+    public Long getSpeedKillResult(Long userId, Long goodsId) {
+        return speedKillComponent.getSpeedKillResult(userId,goodsId);
     }
 
     private SpeedKillUserDTO userVoToDto(SpeedKillUserVO vo) {

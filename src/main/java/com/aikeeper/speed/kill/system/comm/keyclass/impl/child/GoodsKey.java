@@ -18,4 +18,6 @@ public class GoodsKey extends BasePrefix {
     public static GoodsKey goodsListKey = new GoodsKey(Constans.HTML_PAGE_EXPIRE, "gl");
 
     public static GoodsKey goodsDetailKey = new GoodsKey(Constans.HTML_PAGE_EXPIRE, "gd");
+
+    public static GoodsKey speedGoodsStockKey = new GoodsKey(Constans.FOREVER_EXPIRE, "gs");
 }

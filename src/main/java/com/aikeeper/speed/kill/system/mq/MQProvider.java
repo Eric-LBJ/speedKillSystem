@@ -1,6 +1,7 @@
 package com.aikeeper.speed.kill.system.mq;
 
 import com.aikeeper.speed.kill.system.comm.Constans;
+import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 import com.aikeeper.speed.kill.system.utils.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,4 +78,10 @@ public class MQProvider {
         amqpTemplate.convertAndSend(Constans.HEADERS_EXCHANGE, "", obj);
     }
 
+
+    public void sendSpeedKillMessage(SpeedKillMessage speedKillMessage) {
+        String data = ConvertUtils.beanToString(speedKillMessage);
+        logger.info("sendSpeedKillMessage send data : " + data);
+        amqpTemplate.convertAndSend(Constans.SPEED_KILL_QUEUE_NAME, data);
+    }
 }

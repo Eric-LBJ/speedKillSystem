@@ -45,6 +45,10 @@ public class Constans {
      */
     public static final Integer HTML_PAGE_EXPIRE = 60;
     /**
+     * 缓存过期时间:永不过期
+     */
+    public static final Integer FOREVER_EXPIRE = -1;
+    /**
      * cookie名称
      */
     public static final String COOKIE_NAME_TOKEN = "token";
@@ -63,7 +67,7 @@ public class Constans {
     /**
      * 默认商品数量
      */
-    public static final Integer DEFAULT_GOODS_COUNT = 2;
+    public static final Integer DEFAULT_GOODS_COUNT = 1;
     /**
      * MQ
      */
@@ -100,4 +104,12 @@ public class Constans {
      * MQ Headers Queue
      */
     public final static String HEADERS_QUEUE = "headers_queue";
+    /**
+     * SpeedKill MQ Queue
+     */
+    public final static String SPEED_KILL_QUEUE_NAME = "speed_kill_queue";
+    /**
+     * response
+     */
+    public static final Integer RESPONSE_DATA_ZERO = 0;
 }

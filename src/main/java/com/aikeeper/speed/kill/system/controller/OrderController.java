@@ -34,8 +34,6 @@ public class OrderController {
     @ResponseBody
     public Result<OrderDetailVo> cacheKill(@RequestParam("orderId") Long orderId, SpeedKillUserDTO speedKillUserDTO) {
 
-        System.out.println(orderId);
-
         if (ObjectUtils.isEmpty(speedKillUserDTO)) {
             return Result.error(CodeMessage.SESSION_ERROR);
         }
@@ -43,14 +41,14 @@ public class OrderController {
          * 判断订单是否存在
          */
         OrderInfoVO orderInfoVO = orderInfoService.selectByPrimaryKey(orderId);
-        if (!ObjectUtils.isEmpty(orderInfoVO) && !ObjectUtils.isEmpty(orderInfoVO.getId())) {
+        if (ObjectUtils.isEmpty(orderInfoVO) && ObjectUtils.isEmpty(orderInfoVO.getId())) {
             return Result.error(CodeMessage.ORDER_NOT_EXIST);
         }
         /**
          * 获取订单相关的商品信息
          */
         GoodsInfoVO goodsInfoVO = goodsInfoService.selectByPrimaryKey(orderInfoVO.getGoodsId());
-        if (!ObjectUtils.isEmpty(goodsInfoVO) && !ObjectUtils.isEmpty(goodsInfoVO.getId())) {
+        if (ObjectUtils.isEmpty(goodsInfoVO) && ObjectUtils.isEmpty(goodsInfoVO.getId())) {
             return Result.error(CodeMessage.GOODS_OF_ORDER_NOT_EXIST);
         }
 
