@@ -37,17 +37,21 @@ public class Constans {
      */
     public static final String REPLAY_OF_OK = "OK";
     /**
-     * 设置token过期时间两天
+     * token过期时间两天
      */
     public static final Integer TOKEN_EXPIRE = 3600 * 24 * 2;
     /**
-     * 设置页面缓存过期时间一分钟
+     * 页面缓存过期时间一分钟
      */
     public static final Integer HTML_PAGE_EXPIRE = 60;
     /**
      * 缓存过期时间:永不过期
      */
     public static final Integer FOREVER_EXPIRE = -1;
+    /**
+     * 通用缓存过期时间一分钟
+     */
+    public static final Integer DEFAULT_EXPIRE = 300;
     /**
      * cookie名称
      */

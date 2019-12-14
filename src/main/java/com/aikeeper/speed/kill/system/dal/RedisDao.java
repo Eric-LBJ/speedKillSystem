@@ -45,20 +45,31 @@ public interface RedisDao {
      * 自增
      *
      * @param prefix
-     * @param key
+     * @param redisKey
      * @param <T>
      * @return
      */
-    <T> Long incr(KeyPrefix prefix, String key);
+    <T> Long incr(KeyPrefix prefix, String redisKey);
 
     /**
      * 自减
      *
      * @param prefix
-     * @param key
+     * @param redisKey
      * @param <T>
      * @return
      */
-    <T> Long decr(KeyPrefix prefix, String key);
+    <T> Long decr(KeyPrefix prefix, String redisKey);
+
+    /**
+     * 删除key
+     *
+     * @param prefix
+     * @param redisKey
+     * @param <T>
+     * @return
+     */
+    <T> Long delete(KeyPrefix prefix, String redisKey);
+
 
 }

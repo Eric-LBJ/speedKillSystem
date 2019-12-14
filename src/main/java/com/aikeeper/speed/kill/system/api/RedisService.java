@@ -61,4 +61,14 @@ public interface RedisService {
      */
     <T> Long decr(KeyPrefix prefix, String redisKey);
 
+    /**
+     * 删除key
+     *
+     * @param prefix
+     * @param redisKey
+     * @param <T>
+     * @return
+     */
+    <T> Long delete(KeyPrefix prefix, String redisKey);
+
 }

@@ -1,5 +1,8 @@
 package com.aikeeper.speed.kill.system.controller;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.captcha.generator.MathGenerator;
 import com.aikeeper.speed.kill.system.api.*;
 import com.aikeeper.speed.kill.system.comm.Constans;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.GoodsKey;
@@ -21,6 +24,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -138,14 +144,24 @@ public class SpeedKillController implements InitializingBean {
 
     @RequestMapping(value = "/{path}/mqKill", method = RequestMethod.POST)
     @ResponseBody
-    public Result<Integer> mqKill(@PathVariable("path") String path, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+    public Result<Integer> mqKill(@PathVariable("path") String path,
+                                  @RequestParam("goodsId") Long goodsId,
+                                  @RequestParam(value = "verifyCode", defaultValue = "0") String verifyCode,
+                                  SpeedKillUserDTO speedKillUserDTO) {
 
         if (ObjectUtils.isEmpty(speedKillUserDTO)) {
             return Result.error(CodeMessage.SESSION_ERROR);
         }
 
         /**
-         * 验证path
+         * 校验验证码
+         */
+        if (!checkVerifyCode(speedKillUserDTO.getId(), goodsId, verifyCode)) {
+            return Result.error(CodeMessage.VERIFY_CODE_CHECK_FAILURE);
+        }
+
+        /**
+         * 校验path
          */
         if (!checkPath(speedKillUserDTO.getId(), goodsId, path)) {
             return Result.error(CodeMessage.REQUEST_ILLEGAL);
@@ -204,6 +220,37 @@ public class SpeedKillController implements InitializingBean {
         return Result.success(res);
     }
 
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getVerifyCodeImage(HttpServletResponse response, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
+            return Result.error(CodeMessage.SESSION_ERROR);
+        }
+
+        try {
+            /**
+             * 使用hutool生成图形验证码，并写入输出流中
+             * 自定义算数验证码
+             */
+            ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(100, 32, 4, 2);
+            captcha.setGenerator(new MathGenerator());
+            /**LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(80, 32);*/
+            captcha.write(response.getOutputStream());
+
+            /**
+             * 将验证码存到redis，用于之后校验
+             * ScriptEngine在jdk1.6中出现，eval方法是计算表达式的值
+             */
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByName("JavaScript");
+            Integer value = (Integer) engine.eval(captcha.getCode().replace("=", ""));
+            redisService.set(SpeedKillKey.verifyCodeKey, speedKillUserDTO.getId() + "_" + goodsId, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static SpeedKillUserVO dtoToVo(SpeedKillUserDTO speedKillUserDTO) {
         SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
         if (!ObjectUtils.isEmpty(speedKillUserDTO)) {
@@ -217,5 +264,16 @@ public class SpeedKillController implements InitializingBean {
             return Boolean.FALSE;
         }
         return path.equals(redisService.get(SpeedKillKey.requestPathKey, userId + "_" + goodsId, String.class));
+    }
+
+    private boolean checkVerifyCode(Long userId, Long goodsId, String verifyCode) {
+        try {
+            if (ObjectUtils.isEmpty(userId) || ObjectUtils.isEmpty(goodsId) || StringUtils.isEmpty(verifyCode)) {
+                return Boolean.FALSE;
+            }
+            return verifyCode.equals(redisService.get(SpeedKillKey.verifyCodeKey, userId + "_" + goodsId, String.class));
+        }finally {
+            redisService.delete(SpeedKillKey.verifyCodeKey, userId + "_" + goodsId);
+        }
     }
 }

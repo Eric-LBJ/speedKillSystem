@@ -45,7 +45,7 @@ public class MQConsumer {
         logger.info("consumer headers data : " + new String(data));
     }
 
-    @RabbitListener(queues = Constans.QUEUE_NAME)
+    @RabbitListener(queues = Constans.SPEED_KILL_QUEUE_NAME)
     public void consumerSpeedKillMessage(String data) {
         logger.info("consumer data : " + data);
         SpeedKillMessage message = ConvertUtils.stringToBean(data, SpeedKillMessage.class);

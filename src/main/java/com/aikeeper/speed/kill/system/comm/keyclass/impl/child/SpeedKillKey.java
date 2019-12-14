@@ -1,5 +1,6 @@
 package com.aikeeper.speed.kill.system.comm.keyclass.impl.child;
 
+import com.aikeeper.speed.kill.system.comm.Constans;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.BasePrefix;
 
 /**
@@ -20,5 +21,7 @@ public class SpeedKillKey extends BasePrefix {
 
     public static SpeedKillKey goodsOverKey = new SpeedKillKey("go");
 
-    public static SpeedKillKey requestPathKey = new SpeedKillKey("rpk");
+    public static SpeedKillKey requestPathKey = new SpeedKillKey(Constans.DEFAULT_EXPIRE, "rpk");
+
+    public static SpeedKillKey verifyCodeKey = new SpeedKillKey(Constans.DEFAULT_EXPIRE, "vck");
 }

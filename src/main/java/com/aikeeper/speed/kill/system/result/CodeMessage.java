@@ -56,6 +56,7 @@ public class CodeMessage {
      */
     public static CodeMessage LACK_OF_STOCK = new CodeMessage(500300, "商品已经秒杀完了哦，下次记得早点来");
     public static CodeMessage CAN_NOT_REPEAT_SPEED_KILL = new CodeMessage(500301, "您已经秒杀成功了哦，不能重复秒杀");
+    public static CodeMessage VERIFY_CODE_CHECK_FAILURE = new CodeMessage(500302, "验证码错误，请仔细核对");
 
     /**
      * order 500400-500499

@@ -99,6 +99,19 @@ public class RedisDaoImpl implements RedisDao {
         }
     }
 
+    @Override
+    public <T> Long delete(KeyPrefix prefix, String redisKey) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            /**获取真正的key*/
+            String realKey = prefix.getPrefix() + redisKey;
+            return jedis.del(realKey);
+        } finally {
+            returnToPool(jedis);
+        }
+    }
+
     /**
      * 释放jedis资源
      *

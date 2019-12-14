@@ -43,4 +43,9 @@ public class RedisServiceImpl implements RedisService {
     public <T> Long decr(KeyPrefix prefix, String redisKey) {
         return redisDao.decr(prefix, redisKey);
     }
+
+    @Override
+    public <T> Long delete(KeyPrefix prefix, String redisKey) {
+        return redisDao.delete(prefix, redisKey);
+    }
 }
