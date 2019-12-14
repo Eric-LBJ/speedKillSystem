@@ -3,21 +3,22 @@ package com.aikeeper.speed.kill.system.controller;
 import com.aikeeper.speed.kill.system.api.*;
 import com.aikeeper.speed.kill.system.comm.Constans;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.GoodsKey;
+import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.SpeedKillKey;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
 import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
 import com.aikeeper.speed.kill.system.domain.vo.*;
 import com.aikeeper.speed.kill.system.mq.MQProvider;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
 import com.aikeeper.speed.kill.system.result.Result;
+import com.aikeeper.speed.kill.system.utils.IdGeneratorUtils;
+import com.aikeeper.speed.kill.system.utils.Md5Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -135,12 +136,19 @@ public class SpeedKillController implements InitializingBean {
         return Result.success(vo);
     }
 
-    @RequestMapping(value = "/mqKill", method = RequestMethod.POST)
+    @RequestMapping(value = "/{path}/mqKill", method = RequestMethod.POST)
     @ResponseBody
-    public Result<Integer> mqKill(@RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+    public Result<Integer> mqKill(@PathVariable("path") String path, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
 
         if (ObjectUtils.isEmpty(speedKillUserDTO)) {
             return Result.error(CodeMessage.SESSION_ERROR);
+        }
+
+        /**
+         * 验证path
+         */
+        if (!checkPath(speedKillUserDTO.getId(), goodsId, path)) {
+            return Result.error(CodeMessage.REQUEST_ILLEGAL);
         }
 
         /**
@@ -184,11 +192,30 @@ public class SpeedKillController implements InitializingBean {
         return Result.success(result);
     }
 
+    @RequestMapping(value = "/path", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getRequestPath(Model model, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+        model.addAttribute("user", speedKillUserDTO);
+        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
+            return Result.error(CodeMessage.SESSION_ERROR);
+        }
+        String res = Md5Utils.md5(IdGeneratorUtils.simpleUUID());
+        redisService.set(SpeedKillKey.requestPathKey, speedKillUserDTO.getId() + "_" + goodsId, res);
+        return Result.success(res);
+    }
+
     private static SpeedKillUserVO dtoToVo(SpeedKillUserDTO speedKillUserDTO) {
         SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
         if (!ObjectUtils.isEmpty(speedKillUserDTO)) {
             BeanUtils.copyProperties(speedKillUserDTO, speedKillUserVO);
         }
         return speedKillUserVO;
+    }
+
+    private boolean checkPath(Long userId, Long goodsId, String path) {
+        if (ObjectUtils.isEmpty(userId) || ObjectUtils.isEmpty(goodsId) || StringUtils.isEmpty(path)) {
+            return Boolean.FALSE;
+        }
+        return path.equals(redisService.get(SpeedKillKey.requestPathKey, userId + "_" + goodsId, String.class));
     }
 }

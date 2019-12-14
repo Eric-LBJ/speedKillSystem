@@ -48,7 +48,7 @@
                         <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
                         <input type="hidden" name="goodsId"  id="goodsId" />
                     </form>-->
-                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doSpeedKill()">立即秒杀
+                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="getRequestPath()">立即秒杀
                 </button>
                 <input type="hidden" name="goodsId" id="goodsId"/>
             </td>
@@ -69,6 +69,26 @@
 </div>
 </body>
 <script>
+
+    function getRequestPath() {
+        $.ajax({
+            url: "/speed/kill/path",
+            type: "GET",
+            data: {
+                goodsId: $("#goodsId").val(),
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    doSpeedKill(data.data);
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function () {
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
 
     function getSpeedKillResult(goodsId) {
         g_showLoading();
@@ -106,9 +126,9 @@
         });
     }
 
-    function doSpeedKill() {
+    function doSpeedKill(path) {
         $.ajax({
-            url: "/speed/kill/kill",
+            url: "/speed/kill/" + path + "/kill",
             type: "POST",
             data: {
                 goodsId: $("#goodsId").val(),

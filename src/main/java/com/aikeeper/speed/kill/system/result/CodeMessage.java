@@ -40,6 +40,7 @@ public class CodeMessage {
     public static CodeMessage SUCCESS = new CodeMessage(Constans.SUCCESS_CODE, Constans.SUCCESS_MESSAGE);
     public static CodeMessage SERVER_ERROR = new CodeMessage(Constans.SERVER_ERROR_CODE, Constans.SERVER_ERROR_MESSAGE);
     public static CodeMessage BIND_ERROR = new CodeMessage(500101, "参数校验异常：%s");
+    public static CodeMessage REQUEST_ILLEGAL = new CodeMessage(500102, "非法请求");
 
     /**
      * Login 500200-500299

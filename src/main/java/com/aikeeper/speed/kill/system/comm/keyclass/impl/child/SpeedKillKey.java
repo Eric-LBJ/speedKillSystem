@@ -14,5 +14,11 @@ public class SpeedKillKey extends BasePrefix {
         super(prefix);
     }
 
+    public SpeedKillKey(Integer expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+
     public static SpeedKillKey goodsOverKey = new SpeedKillKey("go");
+
+    public static SpeedKillKey requestPathKey = new SpeedKillKey("rpk");
 }
