@@ -1,8 +1,13 @@
 package com.aikeeper.speed.kill.system.controller;
 
-import com.aikeeper.speed.kill.system.api.*;
+import com.aikeeper.speed.kill.system.api.GoodsInfoService;
+import com.aikeeper.speed.kill.system.api.OrderInfoService;
+import com.aikeeper.speed.kill.system.comm.SpeedKillSupport;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
-import com.aikeeper.speed.kill.system.domain.vo.*;
+import com.aikeeper.speed.kill.system.domain.vo.GoodsInfoVO;
+import com.aikeeper.speed.kill.system.domain.vo.OrderDetailVo;
+import com.aikeeper.speed.kill.system.domain.vo.OrderInfoVO;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
 import com.aikeeper.speed.kill.system.result.Result;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +27,7 @@ import javax.annotation.Resource;
  **/
 @Controller
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController extends SpeedKillSupport {
 
     @Resource
     private GoodsInfoService goodsInfoService;
@@ -32,11 +37,9 @@ public class OrderController {
 
     @RequestMapping("/orderDetail")
     @ResponseBody
-    public Result<OrderDetailVo> cacheKill(@RequestParam("orderId") Long orderId, SpeedKillUserDTO speedKillUserDTO) {
+    public Result<OrderDetailVo> cacheKill(@RequestParam("orderId") Long orderId, SpeedKillUserVO speedKillUserVO) {
 
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
-            return Result.error(CodeMessage.SESSION_ERROR);
-        }
+        super.checkUser(speedKillUserVO);
         /**
          * 判断订单是否存在
          */
@@ -56,13 +59,5 @@ public class OrderController {
         vo.setGoodsInfoVO(goodsInfoVO);
         vo.setOrderInfoVO(orderInfoVO);
         return Result.success(vo);
-    }
-
-    private static SpeedKillUserVO dtoToVo(SpeedKillUserDTO speedKillUserDTO) {
-        SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
-        if (!ObjectUtils.isEmpty(speedKillUserDTO)) {
-            BeanUtils.copyProperties(speedKillUserDTO, speedKillUserVO);
-        }
-        return speedKillUserVO;
     }
 }

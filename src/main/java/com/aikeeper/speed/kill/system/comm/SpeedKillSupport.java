@@ -1,6 +1,6 @@
 package com.aikeeper.speed.kill.system.comm;
 
-import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 import com.aikeeper.speed.kill.system.exception.GlobalException;
 import com.aikeeper.speed.kill.system.result.CodeMessage;
 import org.springframework.util.ObjectUtils;
@@ -16,11 +16,11 @@ public class SpeedKillSupport {
     /**
      * 校验是否登陆
      *
-     * @param speedKillUserDTO
+     * @param speedKillUserVO
      * @return
      */
-    public SpeedKillSupport checkUser(SpeedKillUserDTO speedKillUserDTO) {
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
+    public SpeedKillSupport checkUser(SpeedKillUserVO speedKillUserVO) {
+        if (ObjectUtils.isEmpty(speedKillUserVO)) {
             throw new GlobalException(CodeMessage.SESSION_ERROR);
         }
         return this;

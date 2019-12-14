@@ -15,5 +15,7 @@ public class AccessKey extends BasePrefix {
         super(expireSeconds, prefix);
     }
 
-    public static AccessKey accessKey = new AccessKey(Constans.TOKEN_EXPIRE, "tk");
+    public static AccessKey createAccessKey(Integer expireSeconds){
+        return new AccessKey(expireSeconds, "ak");
+    }
 }

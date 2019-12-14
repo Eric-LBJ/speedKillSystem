@@ -1,8 +1,10 @@
 package com.aikeeper.speed.kill.system.config;
 
+import com.aikeeper.speed.kill.system.annotation.filter.AccessInterceptor;
 import com.aikeeper.speed.kill.system.resolver.SpeedKillUserResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import javax.annotation.Resource;
@@ -19,6 +21,9 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Resource
     private SpeedKillUserResolver speedKillUserResolver;
+
+    @Resource
+    private AccessInterceptor accessInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -40,4 +45,9 @@ public class WebConfig extends WebMvcConfigurationSupport {
         super.addResourceHandlers(registry);
     }
 
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(accessInterceptor);
+        super.addInterceptors(registry);
+    }
 }

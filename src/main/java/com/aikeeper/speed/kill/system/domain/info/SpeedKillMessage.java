@@ -1,6 +1,7 @@
 package com.aikeeper.speed.kill.system.domain.info;
 
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 import lombok.Data;
 import lombok.ToString;
 
@@ -26,5 +27,5 @@ public class SpeedKillMessage implements Serializable {
     /**
      * 用户信息
      */
-    private SpeedKillUserDTO speedKillUserDTO;
+    private SpeedKillUserVO speedKillUserVO;
 }

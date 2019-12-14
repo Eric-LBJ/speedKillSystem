@@ -78,7 +78,7 @@ public class GoodsController {
     @RequestMapping(value = "/to_detail/{id}", produces = "text/html")
     @ResponseBody
     public String toDetail(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response,
-                           Model model, SpeedKillUserDTO speedKillUserDTO) {
+                           Model model, SpeedKillUserVO speedKillUserVO) {
 
         /**
          * 先从缓存里面取页面，如果有直接返回
@@ -88,7 +88,7 @@ public class GoodsController {
             return html;
         }
 
-        model.addAttribute("user", speedKillUserDTO);
+        model.addAttribute("user", speedKillUserVO);
         GoodsInfoVO vo = goodsInfoService.selectByPrimaryKey(id);
         model.addAttribute("goods", vo);
 
@@ -124,7 +124,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(SpeedKillUserDTO user, @PathVariable("goodsId") long goodsId) {
+    public Result<GoodsDetailVo> detail(SpeedKillUserVO speedKillUserVO, @PathVariable("goodsId") long goodsId) {
         GoodsInfoVO goodsInfoVO = goodsInfoService.selectByPrimaryKey(goodsId);
         Long startAt = goodsInfoVO.getStartDate().getTime();
         Long endAt = goodsInfoVO.getEndDate().getTime();
@@ -153,18 +153,10 @@ public class GoodsController {
         }
         GoodsDetailVo vo = new GoodsDetailVo();
         vo.setGoodsInfoVO(goodsInfoVO);
-        vo.setSpeedKillUserVO(userDtoToVo(user));
+        vo.setSpeedKillUserVO(speedKillUserVO);
         vo.setRemainSeconds(remainSeconds);
         vo.setSpeedKillStatus(speedKillStatus);
         return Result.success(vo);
-    }
-
-    private SpeedKillUserVO userDtoToVo(SpeedKillUserDTO user) {
-        SpeedKillUserVO speedKillUserVO = new SpeedKillUserVO();
-        if (!ObjectUtils.isEmpty(user)) {
-            BeanUtils.copyProperties(user, speedKillUserVO);
-        }
-        return speedKillUserVO;
     }
 
 }

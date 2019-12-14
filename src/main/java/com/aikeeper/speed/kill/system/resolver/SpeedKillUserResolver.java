@@ -2,7 +2,9 @@ package com.aikeeper.speed.kill.system.resolver;
 
 import com.aikeeper.speed.kill.system.comm.Constans;
 import com.aikeeper.speed.kill.system.component.SpeedKillUserComponent;
+import com.aikeeper.speed.kill.system.context.UserContext;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -26,40 +28,17 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class SpeedKillUserResolver implements HandlerMethodArgumentResolver {
 
-    @Resource
-    private SpeedKillUserComponent speedKillUserComponent;
-
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         Class<?> clazz = methodParameter.getParameterType();
-        return clazz == SpeedKillUserDTO.class;
+        return clazz == SpeedKillUserVO.class;
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
-        HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
 
-        String paramToken = request.getParameter(Constans.COOKIE_NAME_TOKEN);
-        String cookieToken = getCookieValue(request, Constans.COOKIE_NAME_TOKEN);
-        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
-            return null;
-        }
-        String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        return speedKillUserComponent.getSpeedKillUserByToken(response,token);
-    }
-
-    private String getCookieValue(HttpServletRequest request, String cookiName) {
-        Cookie[] cookies = request.getCookies();
-        if (!ObjectUtils.isEmpty(cookies)){
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(cookiName)){
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
+        return UserContext.getUser();
     }
 
 }

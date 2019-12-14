@@ -6,6 +6,8 @@ import com.aikeeper.speed.kill.system.component.*;
 import com.aikeeper.speed.kill.system.dal.RedisDao;
 import com.aikeeper.speed.kill.system.domain.dto.*;
 import com.aikeeper.speed.kill.system.domain.info.SpeedKillMessage;
+import com.aikeeper.speed.kill.system.domain.vo.SpeedKillUserVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,11 +61,11 @@ public class SpeedKillComponentImpl implements SpeedKillComponent {
          * 判断是否已经秒杀到了，每个用户id只能秒杀一次
          */
         SpeedKillOrderInfoDTO speedKillOrderInfoDTO = speedKillOrderInfoComponent
-                .getSpeedKillOrderInfoByUserAndGoodsId(message.getSpeedKillUserDTO().getId(), message.getGoodsId());
+                .getSpeedKillOrderInfoByUserAndGoodsId(message.getSpeedKillUserVO().getId(), message.getGoodsId());
         if (!ObjectUtils.isEmpty(speedKillOrderInfoDTO) && !ObjectUtils.isEmpty(speedKillOrderInfoDTO.getId())) {
             return;
         }
-        speedKill(message.getSpeedKillUserDTO(), goodsInfoComponent.selectByPrimaryKey(message.getGoodsId()));
+        speedKill(voToDto(message.getSpeedKillUserVO()), goodsInfoComponent.selectByPrimaryKey(message.getGoodsId()));
     }
 
     @Override
@@ -120,6 +122,14 @@ public class SpeedKillComponentImpl implements SpeedKillComponent {
             return goodsStockIsReduce && speedKillOrderInfoIsInsert ? orderInfoDTO : null;
         }
         return null;
+    }
+
+    public static SpeedKillUserDTO voToDto(SpeedKillUserVO speedKillUserVO){
+        SpeedKillUserDTO speedKillUserDTO = new SpeedKillUserDTO();
+        if (!ObjectUtils.isEmpty(speedKillUserVO)){
+            BeanUtils.copyProperties(speedKillUserVO,speedKillUserDTO);
+        }
+        return speedKillUserDTO;
     }
 
 }
