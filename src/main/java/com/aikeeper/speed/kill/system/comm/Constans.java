@@ -53,6 +53,10 @@ public class Constans {
      */
     public static final Integer DEFAULT_EXPIRE = 300;
     /**
+     * 限流防刷的缓存过期时间为5秒钟
+     */
+    public static final Integer LIMIT_ACCESS_EXPIRE = 5;
+    /**
      * cookie名称
      */
     public static final String COOKIE_NAME_TOKEN = "token";

@@ -41,6 +41,7 @@ public class CodeMessage {
     public static CodeMessage SERVER_ERROR = new CodeMessage(Constans.SERVER_ERROR_CODE, Constans.SERVER_ERROR_MESSAGE);
     public static CodeMessage BIND_ERROR = new CodeMessage(500101, "参数校验异常：%s");
     public static CodeMessage REQUEST_ILLEGAL = new CodeMessage(500102, "非法请求");
+    public static CodeMessage REQUEST_LIMIT_REACHED = new CodeMessage(500103, "请求过于频繁");
 
     /**
      * Login 500200-500299

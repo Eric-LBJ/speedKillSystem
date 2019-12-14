@@ -5,6 +5,8 @@ import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.MathGenerator;
 import com.aikeeper.speed.kill.system.api.*;
 import com.aikeeper.speed.kill.system.comm.Constans;
+import com.aikeeper.speed.kill.system.comm.SpeedKillSupport;
+import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.AccessKey;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.GoodsKey;
 import com.aikeeper.speed.kill.system.comm.keyclass.impl.child.SpeedKillKey;
 import com.aikeeper.speed.kill.system.domain.dto.SpeedKillUserDTO;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +42,7 @@ import java.util.concurrent.ConcurrentMap;
  **/
 @Controller
 @RequestMapping("/speed/kill")
-public class SpeedKillController implements InitializingBean {
+public class SpeedKillController extends SpeedKillSupport implements InitializingBean {
 
     @Resource
     private GoodsInfoService goodsInfoService;
@@ -113,10 +116,8 @@ public class SpeedKillController implements InitializingBean {
     @RequestMapping(value = "/kill", method = RequestMethod.POST)
     @ResponseBody
     public Result<OrderDetailVo> cacheKill(@RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+        super.checkUser(speedKillUserDTO);
 
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
-            return Result.error(CodeMessage.SESSION_ERROR);
-        }
         /**
          * 判断库存
          */
@@ -148,10 +149,7 @@ public class SpeedKillController implements InitializingBean {
                                   @RequestParam("goodsId") Long goodsId,
                                   @RequestParam(value = "verifyCode", defaultValue = "0") String verifyCode,
                                   SpeedKillUserDTO speedKillUserDTO) {
-
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
-            return Result.error(CodeMessage.SESSION_ERROR);
-        }
+        super.checkUser(speedKillUserDTO);
 
         /**
          * 校验验证码
@@ -199,22 +197,30 @@ public class SpeedKillController implements InitializingBean {
 
     @RequestMapping(value = "/result", method = RequestMethod.POST)
     @ResponseBody
-    public Result<Long> result(Model model, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
-        model.addAttribute("user", speedKillUserDTO);
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
-            return Result.error(CodeMessage.SESSION_ERROR);
-        }
+    public Result<Long> result(@RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+        super.checkUser(speedKillUserDTO);
         Long result = speedKillService.getSpeedKillResult(speedKillUserDTO.getId(), goodsId);
         return Result.success(result);
     }
 
     @RequestMapping(value = "/path", method = RequestMethod.GET)
     @ResponseBody
-    public Result<String> getRequestPath(Model model, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
-        model.addAttribute("user", speedKillUserDTO);
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
-            return Result.error(CodeMessage.SESSION_ERROR);
+    public Result<String> getRequestPath(HttpServletRequest request, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
+        super.checkUser(speedKillUserDTO);
+
+        /**
+         * 限流防刷
+         */
+        String key = request.getRequestURI() + "_" + speedKillUserDTO.getId();
+        Integer accessCount = redisService.get(AccessKey.accessKey, key, Integer.class);
+        if (ObjectUtils.isEmpty(accessCount)) {
+            redisService.set(AccessKey.accessKey, key, 1);
+        } else if (accessCount < 5) {
+            redisService.incr(AccessKey.accessKey, key);
+        } else {
+            return Result.error(CodeMessage.REQUEST_LIMIT_REACHED);
         }
+
         String res = Md5Utils.md5(IdGeneratorUtils.simpleUUID());
         redisService.set(SpeedKillKey.requestPathKey, speedKillUserDTO.getId() + "_" + goodsId, res);
         return Result.success(res);
@@ -223,10 +229,7 @@ public class SpeedKillController implements InitializingBean {
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
     @ResponseBody
     public Result<String> getVerifyCodeImage(HttpServletResponse response, @RequestParam("goodsId") Long goodsId, SpeedKillUserDTO speedKillUserDTO) {
-        if (ObjectUtils.isEmpty(speedKillUserDTO)) {
-            return Result.error(CodeMessage.SESSION_ERROR);
-        }
-
+        super.checkUser(speedKillUserDTO);
         try {
             /**
              * 使用hutool生成图形验证码，并写入输出流中
@@ -272,7 +275,7 @@ public class SpeedKillController implements InitializingBean {
                 return Boolean.FALSE;
             }
             return verifyCode.equals(redisService.get(SpeedKillKey.verifyCodeKey, userId + "_" + goodsId, String.class));
-        }finally {
+        } finally {
             redisService.delete(SpeedKillKey.verifyCodeKey, userId + "_" + goodsId);
         }
     }
