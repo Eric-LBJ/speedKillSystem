@@ -22,6 +22,8 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.util.Locale;
 
 /**
  * @Description: TODO
@@ -65,6 +67,12 @@ public class GoodsController {
          */
         model.addAttribute("goodsList", goodsInfoService.listSpeedKillGoods());
         WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
+        try {
+            ctx.getRequest().setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        ctx.getResponse().setCharacterEncoding("UTF-8");
         /**手动渲染*/
         thymeleafViewResolver.setCharacterEncoding("UTF-8");
         html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
@@ -112,6 +120,7 @@ public class GoodsController {
          * 如果缓存里面没有需要手动渲染
          */
         WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
+
         /**手动渲染*/
         thymeleafViewResolver.setCharacterEncoding("UTF-8");
         html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
